@@ -13,13 +13,13 @@
                   echo '<p>'.$i.'</p>';
                 }
             }
-        echo'<p>Print the nine times table up to 12 x 9.</p>';
+            echo'<p>Print the nine times table up to 12 x 9.</p>';
             $nineTimes = 0;
             for ($n=1; $n <= 12; $n++) { 
                 $nineTimes += 9;
                 echo '<p>'.$nineTimes.'</p>';
             }
-        echo'<p>Print the nine times table in requested format.</p>';
+            echo'<p>Print the nine times table in requested format.</p>';
             $nineTimesFormated = 0;
             for ($n=1; $n <= 12; $n++) { 
                 $nineTimesFormated = 9 * $n;
