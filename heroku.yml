@@ -1,10 +1,5 @@
 build:
   docker:
     web: Dockerfile
-    php:
-        build:
-            context:
-        volumes:
-            - ./app:/app
 run:
   web: bundle exec puma -C config/puma.rb
