@@ -3,8 +3,7 @@ build:
     web: Dockerfile
     php:
         build:
-            context: .
-            dockerfile: PHP.Dockerfile
+            context:
         volumes:
             - ./app:/app
 run:
