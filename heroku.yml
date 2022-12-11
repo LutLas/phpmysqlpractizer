@@ -1,8 +1,0 @@
-build:
-  docker:
-    web: Dockerfile
-        volumes:
-            - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
-            - ./app:/app
-run:
-  web: bundle exec puma -C config/puma.rb
