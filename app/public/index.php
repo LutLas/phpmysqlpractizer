@@ -8,6 +8,34 @@
 // $row = $query->fetch();
 
 // echo 'MySQL version:' . $row['Value'];
+$pdo = null;
+
+try {
+    $pdo = new PDO('mysql:host=mysql;dbname=practizer;charset=utf8mb4', 'practizer', 'secret');
+     $message = 'Database connection established.';
+  }
+  catch (PDOException $e) {
+    $message = 'Unable to connect to the database server: ' . $e->getMessage() . ' in ' .
+    $e->getFile() . ':' . $e->getLine();
+  }
+
+  try {
+    $sql = 'CREATE TABLE joke (
+      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      joketext TEXT,
+      jokedate DATE NOT NULL
+    ) DEFAULT CHARACTER SET utf8 ENGINE=InnoDB';
+  
+    $pdo->exec($sql);
+  
+    $message = 'Joke table successfully created.';
+  }
+  catch (PDOException $e) {
+    $message = 'Database error: ' . $e->getMessage() . ' in ' .
+    $e->getFile() . ':' . $e->getLine();
+  }
+
+  include  __DIR__ . '/./templates/output.html.php';
 
 if (!isset($_POST['firstname'])) {
     include  __DIR__ . '/./templates/form.html.php';
