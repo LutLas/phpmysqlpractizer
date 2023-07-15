@@ -9,6 +9,9 @@
 
 // echo 'MySQL version:' . $row['Value'];
 $pdo = null;
+$output = null;
+$message = null;
+$title = 'HOME';
 
 try {
     $pdo = new PDO('mysql:host=mysql;dbname=practizer;charset=utf8mb4', 'practizer', 'secret');
@@ -35,4 +38,4 @@ try {
     $e->getFile() . ':' . $e->getLine();
   }
 
-  include  __DIR__ . '/./templates/output.html.php';
+  include  __DIR__ . '/./templates/layout.html.php';
