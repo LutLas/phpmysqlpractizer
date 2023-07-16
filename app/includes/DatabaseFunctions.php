@@ -46,19 +46,19 @@
 
     function updateJoke($pdo, $values) {
       $query = ' UPDATE `joke` SET ';
-    
-        $updateFields = [];
 
-        foreach ($values as $key => $value) {
-            $updateFields[] = '`' . $key . '` = :' . $key;
-        }
-    
-      $query .= implode(', ', $updateFields);
+      foreach ($values as $key => $value) {
+          $query .= '`' . $key . '` = :' . $key . ',';
+      }
+
+      $query = rtrim($query, ',');
   
       $query .= ' WHERE `id` = :primaryKey';
   
       // Set the :primaryKey variable
       $values['primaryKey'] = $values['id'];
+
+      $values = processDates($values);
   
       $stmt = $pdo->prepare($query);
       $stmt->execute($values);
