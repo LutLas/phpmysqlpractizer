@@ -1,6 +1,6 @@
 <?php
     try {
-        $pdo = new PDO('mysql:host=mysql;dbname=practizer;charset=utf8mb4', 'practizer', 'secret');
+        include __DIR__ . '/../includes/DatabaseConnection.php';
 
         $sql = 'DELETE FROM `joke` WHERE
             `id` LIKE :jokeid';

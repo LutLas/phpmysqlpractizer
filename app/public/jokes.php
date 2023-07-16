@@ -1,8 +1,7 @@
 <?php
 
 try {
-    $pdo = new PDO('mysql:host=mysql;dbname=practizer;charset=utf8mb4', 'practizer', 'secret');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    include __DIR__ . '/../includes/DatabaseConnection.php';
 
     $sql = 'SELECT * FROM `joke` INNER JOIN `author` ON `authorid` = `author`.`id`';
     

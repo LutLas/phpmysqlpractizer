@@ -1,7 +1,7 @@
 <?php
 if (isset($_POST['joketext'])) {
     try {
-        $pdo = new PDO('mysql:host=mysql;dbname=practizer;charset=utf8mb4', 'practizer', 'secret');
+        include __DIR__ . '/../includes/DatabaseConnection.php';
 
         $sql = 'INSERT INTO `joke` SET
             `joketext` = :joketext,
