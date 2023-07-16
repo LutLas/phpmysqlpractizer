@@ -3,15 +3,12 @@ try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
-    if (isset($_POST['joketext'])) {
+    if (isset($_POST['joke'])) {
+        $joke = $_POST['joke'];
+        $joke['jokedate'] = new DateTime();
+        $joke['authorId'] = 1;
 
-        saveGeneric($pdo, 'joke', 'id', [
-                    'id' => $_POST['jokeid'],
-                    'joketext' => $_POST['joketext'],
-                    'jokedate' => new DateTime(),
-                    'authorId' => 1
-                 ]
-                );
+        saveGeneric($pdo, 'joke', 'id', $joke);
 
         header('location: jokes.php');  
     } else {
