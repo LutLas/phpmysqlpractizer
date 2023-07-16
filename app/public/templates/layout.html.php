@@ -15,9 +15,9 @@
     </header>
     <nav>
         <ul>
-            <li><a href="index.php">HOME</a></li>
-            <li><a href="jokes.php">JOKES LIST</a></li>
-            <li><a href="addjoke.php">ADD JOKE</a></li>
+            <li><a class="customa" href="index.php">HOME</a></li>
+            <li><a class="customa" href="jokes.php">JOKES LIST</a></li>
+            <li><a class="customa" href="addjoke.php">ADD JOKE</a></li>
         </ul>
     </nav>
 

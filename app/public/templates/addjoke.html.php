@@ -7,8 +7,7 @@
         </thead>
         <tbody>
             <td>
-                <textarea id="joketext" name="joketext" rows="3" cols="40">
-                </textarea>
+                <textarea id="joketext" name="joketext" rows="3" cols="30"></textarea>
             </td>
         </tbody>
         <tfoot>
