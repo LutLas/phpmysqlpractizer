@@ -3,14 +3,26 @@
 try {
   include __DIR__ . '/../includes/DatabaseConnection.php';
   include __DIR__ . '/../includes/DatabaseFunctions.php';
-    
-    $jokes = allJokes($pdo);
+  
+    $result = findAllGeneric($pdo, 'joke');
+
+    $jokes = [];
+
+    foreach ($result as $joke) {
+      $author = findGeneric($pdo, 'author', 'id', $joke['authorid'])[0];
+
+      $jokes[] = [
+              'id' => $joke['id'],
+              'joketext' => $joke['joketext'],
+              'jokedate' => $joke['jokedate'],
+              'name' => $author['name'],
+              'email' => $author['email']
+      ];
+    }
 
     $title = 'Joke List';
 
-    $totalJokes = totalJokes($pdo);
-
-    $output = '';
+    $totalJokes = totalGeneric($pdo, 'joke');
     
     // Start the buffer
 

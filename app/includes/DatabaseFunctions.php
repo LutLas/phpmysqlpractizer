@@ -1,26 +1,31 @@
 <?php
-    function totalJokes($database) {
-        $stmt = $database->prepare('SELECT COUNT(*) FROM `joke`');
-        $stmt->execute();
-    
-        $row = $stmt->fetch();
-    
-        return $row[0];
+    function processDates($values) {
+      foreach ($values as $key => $value) {
+          if ($value instanceof DateTime) {
+              $values[$key] = $value->format('Y-m-d H:i:s');
+          }
+      }
+  
+      return $values;
     }
 
-    function getJoke($pdo, $id) {
-        $stmt = $pdo->prepare('SELECT * FROM `joke` WHERE `id` = :id');
-      
-        $values = [
-            'id' => $id
-        ];
-        $stmt->execute($values);
-      
-        return $stmt->fetch();
+    function findAllGeneric($pdo, $table) {
+      $stmt = $pdo->prepare('SELECT * FROM `' . $table . '`');
+          $stmt->execute();
+  
+      return $stmt->fetchAll();
     }
 
-    function insertJoke($pdo, $values) {
-      $query = 'INSERT INTO `joke` (';
+    function deleteGeneric($pdo, $table, $field, $value) {
+      $values = [':value' => $value];
+
+      $stmt = $pdo->prepare('DELETE FROM `' . $table . '` WHERE `' . $field . '` = :value');
+
+      $stmt->execute($values);
+    }
+
+    function insertGeneric($pdo, $table, $values) {
+      $query = 'INSERT INTO `' . $table . '` (';
   
       foreach ($values as $key => $value) {
           $query .= '`' . $key . '`,';
@@ -44,54 +49,45 @@
           $stmt->execute($values);
     }
 
-    function updateJoke($pdo, $values) {
-      $query = ' UPDATE `joke` SET ';
+    function updateGeneric($pdo, $table, $primaryKey, $values) {
 
+      $query = ' UPDATE `' . $table .'` SET ';
+  
       foreach ($values as $key => $value) {
           $query .= '`' . $key . '` = :' . $key . ',';
       }
-
+  
       $query = rtrim($query, ',');
   
-      $query .= ' WHERE `id` = :primaryKey';
+      $query .= ' WHERE `' . $primaryKey . '` = :primaryKey';
   
       // Set the :primaryKey variable
       $values['primaryKey'] = $values['id'];
-
+  
       $values = processDates($values);
+  
+          $stmt = $pdo->prepare($query);
+          $stmt->execute($values);
+    }
+
+    function findGeneric($pdo, $table, $field, $value) {
+      $query = 'SELECT * FROM `' . $table . '` WHERE `' . $field . '` = :value';
+  
+      $values = [
+          'value' => $value
+      ];
   
       $stmt = $pdo->prepare($query);
       $stmt->execute($values);
-    }
-
-    function deleteJoke($pdo, $id) {
-
-      $stmt = $pdo->prepare('DELETE FROM `joke` WHERE `id` = :id');
-    
-      $values = [
-        ':id' => $id
-      ];
-    
-      $stmt->execute($values);
-    }
-
-    function allJokes($pdo) {
-      $stmt = $pdo->prepare('SELECT `joke`.`id`, `joketext`, `jokedate`, `name`, `email`
-        FROM `joke` INNER JOIN `author`
-          ON `authorid` = `author`.`id`');
-    
-      $stmt->execute();
-    
       return $stmt->fetchAll();
     }
 
-    function processDates($values) {
-      foreach ($values as $key => $value) {
-          if ($value instanceof DateTime) {
-              $values[$key] = $value->format('Y-m-d H:i:s');
-          }
-      }
-  
-      return $values;
+    function totalGeneric($pdo, $table) {
+      $stmt = $pdo->prepare('SELECT COUNT(*) FROM `' . $table . '`');
+          $stmt->execute();
+      $row = $stmt->fetch();
+      return $row[0];
     }
+
+
       
