@@ -1,7 +1,6 @@
 <?php
 
 $title = 'Internet Joke Database';
-$message = '';
 
 ob_start();
 

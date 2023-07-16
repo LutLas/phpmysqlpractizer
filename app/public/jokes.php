@@ -1,15 +1,15 @@
 <?php
 
 try {
-    include __DIR__ . '/../includes/DatabaseConnection.php';
-
-    $sql = 'SELECT * FROM `joke` INNER JOIN `author` ON `authorid` = `author`.`id`';
+  include __DIR__ . '/../includes/DatabaseConnection.php';
+  include __DIR__ . '/../includes/DatabaseFunctions.php';
     
-    $jokes = $pdo->query($sql);
+    $jokes = allJokes($pdo);
 
     $title = 'Joke List';
 
-    $message = '';
+    $totalJokes = totalJokes($pdo);
+
     $output = '';
     
     // Start the buffer

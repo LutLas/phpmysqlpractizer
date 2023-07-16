@@ -22,7 +22,6 @@
     </nav>
 
     <main>
-        <?= $message ?>
         <?= $output ?>
     </main>
 
