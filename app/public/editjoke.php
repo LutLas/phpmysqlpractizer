@@ -4,16 +4,23 @@ try {
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
     if (isset($_POST['joketext'])) {
-        updateGeneric($pdo, 'joke', 'id', [
-                'id' => $_POST['jokeid'],
-                'joketext' => $_POST['joketext'],
-                'authorId' => 1
-             ]
-        );
 
-        header('location: jokes.php');
+        saveGeneric($pdo, 'joke', 'id', [
+                    'id' => $_POST['jokeid'],
+                    'joketext' => $_POST['joketext'],
+                    'jokedate' => new DateTime(),
+                    'authorId' => 1
+                 ]
+                );
+
+        header('location: jokes.php');  
     } else {
-        $joke = findGeneric($pdo, 'joke', 'id', $_GET['id'])[0];
+        if (isset($_GET['id'])) {
+            $joke = findGeneric($pdo, 'joke', 'id', $_GET['id'])[0] ?? null;
+        }
+        else {
+          $joke = null;
+        }
 
         $title = 'Edit joke';
 

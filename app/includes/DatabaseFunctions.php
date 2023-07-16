@@ -89,5 +89,18 @@
       return $row[0];
     }
 
+    function saveGeneric($pdo, $table, $primaryKey, $record) {
+      try {
+          if (empty($record[$primaryKey])) {
+            unset($record[$primaryKey]);
+          }
+          insertGeneric($pdo, $table, $record);
+      }
+      catch (PDOException $e) {
+          updateGeneric($pdo, $table, $primaryKey, $record);
+      }
+    }
+  
+
 
       
