@@ -1,21 +1,37 @@
 <?php
-  try {
+
+try {
     $pdo = new PDO('mysql:host=mysql;dbname=practizer;charset=utf8mb4', 'practizer', 'secret');
 
-    $sql = 'SELECT `joketext` FROM `joke`';
-    $result = $pdo->query($sql);
+    $sql = 'SELECT * FROM `joke`';
+    
+    $jokes = $pdo->query($sql);
 
-    /* while ($row = $result->fetch()) {
-      $jokes[] = $row['joketext'];
-    } */
+    $title = 'Joke List';
 
-    foreach ($result as $row) {
-        $jokes[] = $row['joketext'];
-    }
+    $message = '';
+    $output = '';
+    
+    // Start the buffer
 
-  } catch (PDOException $e) {
-      $error = 'Unable to connect to the database server: ' . $e->getMessage() . ' in ' .
-    $e->getFile() . ':' . $e->getLine();
-  }
+    ob_start();
 
-  include  __DIR__ . '/./templates/jokes.html.php';
+    // Include the template. The PHP code will be executed,
+    // but the resulting HTML will be stored in the buffer
+    // rather than sent to the browser.
+
+    include  __DIR__ . '/./templates/jokes.html.php';
+
+    // Read the contents of the output buffer and store them
+    // in the $output variable for use in layout.html.php
+
+    $output = ob_get_clean();
+
+} catch (PDOException $e) {
+    $title = 'An error has occurred';
+
+    $output = 'Database error: ' . $e->getMessage() . ' in ' .
+  $e->getFile() . ':' . $e->getLine();
+}
+
+include  __DIR__ . '/./templates/layout.html.php';

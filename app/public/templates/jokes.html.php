@@ -1,26 +1,11 @@
-<!doctype html>
-<html lang="en">
-
-  <head>
-    <title>List of jokes</title>
-    <link rel="stylesheet" href="form.css" />
-    <meta charset="utf-8">
-  </head>
-
-  <body>
-    <?php if (isset($error)) : ?>
-      <p>
-        <?=$error?>
-      </p>
-    <?php else : ?>
-      <?php foreach ($jokes as $joke) : ?>
-        <blockquote>
-          <p>
-            <?=htmlspecialchars($joke, ENT_QUOTES, 'UTF-8')?>
-          </p>
-        </blockquote>
-      <?php endforeach; ?>
-    <?php endif; ?>
-  </body>
-
-</html>
+<?php foreach ($jokes as $joke) : ?>
+  <blockquote style="align-items: center; justify-content: center; display: flex; border-bottom: 1px solid #ccc;">
+    <p>
+      <?= htmlspecialchars($joke['joketext'], ENT_QUOTES, 'UTF-8') ?>
+      <form action="deletejoke.php" method="post">
+        <input hidden type="text" name="jokeid" id="jokeid" value="<?= $joke['id'] ?>">
+        <input style="margin-left: 8px;" type="submit" name="submit" value="Delete">
+      </form>
+    </p>
+  </blockquote>
+<?php endforeach; ?>
