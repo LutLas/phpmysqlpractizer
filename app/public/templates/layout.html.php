@@ -16,8 +16,8 @@
     <nav>
         <ul>
             <li><a class="customa" href="index.php">HOME</a></li>
-            <li><a class="customa" href="jokes.php">JOKES LIST</a></li>
-            <li><a class="customa" href="editjoke.php">ADD JOKE</a></li>
+            <li><a class="customa" href="index.php?action=list">JOKES LIST</a></li>
+            <li><a class="customa" href="index.php?action=edit">ADD JOKE</a></li>
         </ul>
     </nav>
 
