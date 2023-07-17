@@ -1,6 +1,8 @@
 <?php
-include_once '../classes/EntryPoint.php';
+include __DIR__ . '/../includes/autoload.php';
 
 $uri = strtok(ltrim($_SERVER['REQUEST_URI'], '/'), '?');
-$entryPoint = new EntryPoint();
+
+$jokeWebsite = new JokeWebsite();
+$entryPoint = new EntryPoint($jokeWebsite);
 $entryPoint -> run($uri);
