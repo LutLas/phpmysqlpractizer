@@ -44,10 +44,10 @@ class JokeController {
     public function delete() {
         $this->jokesTable->deleteGeneric('id', $_POST['jokeid']);
 
-        header('location: index.php?action=list');
+        header('location: /joke/list');
     }
 
-    public function edit() {
+    public function edit($id = null) {
         if (isset($_POST['joke'])) {
             $joke = $_POST['joke'];
             $joke['jokedate'] = new DateTime();
@@ -55,10 +55,10 @@ class JokeController {
     
             $this->jokesTable->saveGeneric($joke);
     
-            header('location: index.php?action=list');  
+            header('location: /joke/list');  
         } else {
-            if (isset($_GET['id'])) {
-                $joke = $this->jokesTable->findGeneric('id', $_GET['id'])[0] ?? null;
+            if (isset($id)) {
+                $joke = $this->jokesTable->findGeneric('id', $id)[0] ?? null;
             }
             else {
               $joke = null;

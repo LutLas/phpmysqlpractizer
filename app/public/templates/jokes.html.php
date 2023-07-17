@@ -16,10 +16,10 @@
 
         
       <div>
-          <a style="margin-left: 12px;" href="index.php?action=edit&id=<?=$joke['id']?>">Edit</a>
+          <a style="margin-left: 12px;" href="/joke/edit/<?=$joke['id']?>">Edit</a>
       </div>
 
-      <form action="index.php?action=delete" method="post">
+      <form action="/joke/delete" method="post">
         <input hidden type="text" name="jokeid" id="jokeid" value="<?= $joke['id'] ?>">
         <input style="margin-left: 8px;" type="submit" name="submit" value="Delete">
       </form>
