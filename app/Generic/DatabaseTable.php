@@ -1,6 +1,7 @@
 <?php
+namespace Generic;
 class DatabaseTable {
-    public function __construct(private PDO $pdo, private string $table, private string $primaryKey) {
+    public function __construct(private \PDO $pdo, private string $table, private string $primaryKey) {
     }
 
     public function totalGeneric() {
@@ -85,7 +86,7 @@ class DatabaseTable {
 
     private function processDates($values) {
       foreach ($values as $key => $value) {
-          if ($value instanceof DateTime) {
+          if ($value instanceof \DateTime) {
               $values[$key] = $value->format('Y-m-d H:i:s');
           }
       }
@@ -100,7 +101,7 @@ class DatabaseTable {
           }
           $this->insertGeneric($record);
       }
-      catch (PDOException $e) {
+      catch (\PDOException $e) {
         $this->updateGeneric($record);
       }
     }

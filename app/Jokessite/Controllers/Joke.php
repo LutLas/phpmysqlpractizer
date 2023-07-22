@@ -1,5 +1,7 @@
 <?php
-class JokeController {
+namespace Jokessite\Controllers;
+use Generic\DatabaseTable;
+class Joke {
     public function __construct(private DatabaseTable $jokesTable, private DatabaseTable $authorsTable) {
 
     }
@@ -49,7 +51,7 @@ class JokeController {
 
     public function editSubmit() {
             $joke = $_POST['joke'];
-            $joke['jokedate'] = new DateTime();
+            $joke['jokedate'] = new \DateTime();
             $joke['authorId'] = 1;
     
             $this->jokesTable->saveGeneric($joke);
