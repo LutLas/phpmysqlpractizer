@@ -19,7 +19,7 @@ class EntryPoint {
         }
     }
 
-    public function run($uri){
+    public function run($uri, $method){
         try {
             $this->checkUri($uri);
           
@@ -31,6 +31,10 @@ class EntryPoint {
           
             $controllerName = array_shift($route);
             $action = array_shift($route);
+
+            if ($method === 'POST') {
+                $action .= 'Submit';
+            }
 
             $controller = $this->website->getController($controllerName);
             

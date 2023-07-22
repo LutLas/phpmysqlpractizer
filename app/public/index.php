@@ -5,4 +5,4 @@ $uri = strtok(ltrim($_SERVER['REQUEST_URI'], '/'), '?');
 
 $jokeWebsite = new JokeWebsite();
 $entryPoint = new EntryPoint($jokeWebsite);
-$entryPoint -> run($uri);
+$entryPoint -> run($uri, $_SERVER['REQUEST_METHOD']);

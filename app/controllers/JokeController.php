@@ -41,14 +41,13 @@ class JokeController {
         return ['template' => 'home.html.php', 'title' => $title];
     }
 
-    public function delete() {
+    public function deleteSubmit() {
         $this->jokesTable->deleteGeneric('id', $_POST['jokeid']);
 
         header('location: /joke/list');
     }
 
-    public function edit($id = null) {
-        if (isset($_POST['joke'])) {
+    public function editSubmit() {
             $joke = $_POST['joke'];
             $joke['jokedate'] = new DateTime();
             $joke['authorId'] = 1;
@@ -56,12 +55,11 @@ class JokeController {
             $this->jokesTable->saveGeneric($joke);
     
             header('location: /joke/list');  
-        } else {
+    }
+
+    function edit($id = null) {
             if (isset($id)) {
                 $joke = $this->jokesTable->findGeneric('id', $id)[0] ?? null;
-            }
-            else {
-              $joke = null;
             }
     
             $title = 'Edit joke';
@@ -69,9 +67,8 @@ class JokeController {
             return ['template' => 'editjoke.html.php', 
                     'title' => $title,
                     'variables' => [
-                        'joke' => $joke
+                        'joke' => $joke ?? null
                     ]
                 ];
-        }
     }
 }
