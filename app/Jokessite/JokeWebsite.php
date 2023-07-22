@@ -4,6 +4,7 @@ use Generic\DatabaseTable;
 use Generic\Website;
 use Jokessite\Controllers\Joke;
 use Jokessite\Controllers\Author;
+//use Jokessite\Controllers\Error;
 class JokeWebsite implements Website {
     public function getDefaultRoute(): string {
         return 'joke/home';
@@ -22,6 +23,9 @@ class JokeWebsite implements Website {
         }
         else if ($controllerName === 'author') {
             $controller = new Author($authorsTable);
+        }
+        else {
+            $controller = null;
         }
 
         return $controller;
