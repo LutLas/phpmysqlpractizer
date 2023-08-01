@@ -11,7 +11,7 @@
 <body>
 
     <header>
-        <h2>INTERNET JOKE DATABASE</h2>
+        <h2><?= $heading ?></h2>
     </header>
     <nav>
         <ul>
@@ -22,6 +22,7 @@
     </nav>
 
     <main>
+        <p class=<?=$alertStyle?>> <?=$alertText?></p>
         <?= $output ?>
     </main>
 

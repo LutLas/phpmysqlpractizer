@@ -26,9 +26,18 @@ class Joke {
         $title = 'Joke List';
 
         $totalJokes = $this->jokesTable->totalGeneric();
+           
+        $heading = 'List of Jokes';
+
+        $alertText = $totalJokes. ' jokes have been submitted to the Internet Joke Database.';
+
+        $alertStyle = 'noticep';
 
         return ['template' => 'jokes.html.php', 
                 'title' => $title,
+                'heading' => $heading,
+                'alertText' => $alertText,
+                'alertStyle' => $alertStyle,
                 'variables' => [
                     'totalJokes' => $totalJokes,
                     'jokes' => $jokes
@@ -39,8 +48,10 @@ class Joke {
     public function home() {
 
         $title = 'Internet Joke Database';
+           
+        $heading = 'The Ultimate Joke Database';
 
-        return ['template' => 'home.html.php', 'title' => $title];
+        return ['template' => 'home.html.php', 'title' => $title, 'heading' => $heading];
     }
 
     public function deleteSubmit() {
@@ -65,9 +76,12 @@ class Joke {
             }
     
             $title = 'Edit joke';
+           
+            $heading = 'Joke Modification Page';
 
             return ['template' => 'editjoke.html.php', 
                     'title' => $title,
+                    'heading' => $heading,
                     'variables' => [
                         'joke' => $joke ?? null
                     ]

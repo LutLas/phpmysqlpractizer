@@ -44,6 +44,21 @@ body {
   margin: 2px;
 }
 
+.noticef {
+  background: rgb(255, 0, 0);
+  /* Make it white if you need */
+  color: #ffffff;
+  text-align: center;
+  font-style: italic;
+  font: 0.8em sans-serif;
+  padding: 2px;
+  margin: 2px;
+}
+
+.hidden {
+  display: none;
+}
+
 ul {
   background: transparent;
   list-style: none;

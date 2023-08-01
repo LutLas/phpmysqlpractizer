@@ -1,4 +1,3 @@
-<p class="noticep"><?=$totalJokes?> jokes have been submitted to the Internet Joke Database.</p>
 <?php foreach ($jokes as $joke) : ?>
   <blockquote style="align-items: center; justify-content: center; display: flex; border-bottom: 1px solid #ccc;">
     <p>

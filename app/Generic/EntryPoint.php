@@ -42,7 +42,13 @@ class EntryPoint {
             if (is_callable([$controller, $action])) {
                 $page = $controller->$action(...$route);
            
-               $title = $page['title'];
+                $title = $page['title'];
+           
+                $heading = $page['heading'] ?? "";
+
+                $alertText = $page['alertText'] ?? "";
+
+                $alertStyle = $page['alertStyle'] ?? "hidden";
            
                $variables = $page['variables'] ?? [];
                $output = $this->loadTemplate($page['template'], $variables);
@@ -50,11 +56,20 @@ class EntryPoint {
            else {
                http_response_code(404);
                $title = 'Not found';
+           
+               $heading = 'Missing Page';
+
+               $alertText = '404';
+
+               $alertStyle = "noticef";
+
                $output = 'Sorry, the page you are looking for could not be found.';
            }
           
           } catch (\PDOException $e) {
               $title = 'An error has occurred';
+           
+              $heading = ''. $e->getCode();
           
               $output = 'Database error: ' . $e->getMessage() . ' in ' .
             $e->getFile() . ':' . $e->getLine();

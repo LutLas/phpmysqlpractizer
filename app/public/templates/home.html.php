@@ -1,2 +1,2 @@
-<h3>Internet Joke Database</h3>
+<h3>Knock! knock!</h3>
 <p>Welcome to the Internet Joke Database</p>
