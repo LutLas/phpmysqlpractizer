@@ -27,27 +27,44 @@ class Author {
         $author = $_POST['author'];
 
         // Assume the data is valid to begin with
-        $valid = true;
-        $missingFields = '';
+        $errors = [];
       
         // But if any of the fields have been left blank, set $valid to false
         if (empty($author['email'])) {
-          $valid = false;
-          $missingFields .= "  Email Address Missing!  ";
-        }
+            $errors[] = 'Email  Address is Required';
+          }
+          else if (filter_var($author['email'], FILTER_VALIDATE_EMAIL) == false) {
+            $errors[] = '"'.$author['email'].'" is An Invalid Email';
+          }
+          if (count($this->authorsTable->findGeneric('email', $author['email'])) > 0) {
+            $errors[] = '"'.$author['email'].'" is Already Registered';
+          }
 
         if (empty($author['name'])) {
-          $valid = false;
-          $missingFields .= "  User Name Missing!  ";
+          $errors[] = 'User Name is Required';
         }
       
         if (empty($author['password'])) {
-            $valid = false;
-            $missingFields .= "  Password Missing!  ";
+            $errors[] = 'Password is Required';
+          }elseif (strlen($author['password']) < 8 || strlen($author['password']) > 16 ) {
+            $errors[] = 'Password Must Be 8-16 Characters';
+          }elseif (ctype_alnum($author['password'])) {
+            $errors[] = 'Password Must Contain One Non-Alphanumeric Character';
+          }
+
+          if (strcmp($author['password'], $author['passwordConfirm']) !== 0){
+            $errors[] = 'Passwords Do Not Match';
+          }else{
+            unset($author['passwordConfirm']);
           }
         
-          // If $valid is still true, no fields were blank and the data can be added
-          if ($valid == true) {
+          // If the $errors array is still empty, no fields were blank and the data can be added
+          if (empty($errors)) {
+            // Hash the password before saving it in the database
+            $author['password'] = password_hash($author['password'], PASSWORD_DEFAULT);
+          
+            // When submitted, the $author variable now contains a lowercase value for email
+            // and a hashed password
             $this->authorsTable->saveGeneric($author);
         
             header('Location: /author/success');
@@ -57,8 +74,12 @@ class Author {
             return ['template' => 'register.html.php',
                   'title' => 'Register an account',
                   'heading' => 'User Account Registration Form',
-                  'alertText' => 'Registration was unsuccessful due to incomplete form submission.'.$missingFields,
-                  'alertStyle' => 'noticef'
+                  'alertText' => 'Registration was unsuccessful due to incomplete form submission.',
+                  'alertStyle' => 'noticef',
+                  'errors' => $errors,
+                  'variables' => [
+                    'author' => $author
+                  ]
                 ];
           }
       }

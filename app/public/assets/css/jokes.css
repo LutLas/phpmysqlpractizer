@@ -41,7 +41,7 @@ body {
   font-style: italic;
   font: 0.8em sans-serif;
   padding: 2px;
-  margin: 2px;
+  margin: 0px;
 }
 
 .noticef {
@@ -51,20 +51,29 @@ body {
   text-align: center;
   font-style: italic;
   font: 0.8em sans-serif;
-  padding: 2px;
-  margin: 2px;
+  padding: 1px;
+  margin: 0px;
 }
 
 .hidden {
   display: none;
 }
 
-ul {
+.navmaster {
   background: transparent;
   list-style: none;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.errors {
+  padding: 1px;
+  border: 0.5px solid red;
+  background-color: lightyellow;
+  color: red;
+  margin-bottom: 0.5px;
+  overflow: auto;
 }
 
 nav {
@@ -79,21 +88,3 @@ footer {
   padding: 8px;
   text-align: center;
 }
-
-/* blockquote {
-  display: table;
-  margin-bottom: 1em;
-  border-bottom: 1px solid #ccc;
-  padding: 0.5em;
-}
-
-blockquote p {
-  display: table-cell;
-  width: 90%;
-  vertical-align: top;
-}
-
-blockquote form {
-  display: table-cell;
-  width: 10%;
-} */

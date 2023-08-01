@@ -11,7 +11,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input name="author[email]" id="email" type="email">
+                        <input name="author[email]" id="email" type="email" value="<?=$author['email'] ?? ''?>">
                     </td>
                 </tr>
                 <tr style="margin-bottom: 8px;">
@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input name="author[name]" id="name" type="text">
+                        <input name="author[name]" id="name" type="text" value="<?=$author['name'] ?? ''?>">
                     </td>
                 </tr>
                 <tr style="margin-bottom: 8px;">
@@ -45,7 +45,24 @@
                 </tr>
                 <tr>
                     <td>
-                        <input name="author[password]" id="password" type="password">
+                        <input name="author[password]" id="password" type="password" value="<?=$author['password'] ?? ''?>">
+                    </td>
+                </tr>
+                <tr style="margin-bottom: 8px;">
+                    <td>
+                        <small></small>
+                    </td>
+                </tr>
+            </tr>
+            <tr>
+                <tr>
+                    <th>
+                        <label for="passwordConfirm">Confirm Password</label>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input name="author[passwordConfirm]" id="passwordConfirm" type="password" value="<?=$author['passwordConfirm'] ?? ''?>">
                     </td>
                 </tr>
                 <tr style="margin-bottom: 8px;">

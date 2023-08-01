@@ -49,6 +49,8 @@ class EntryPoint {
                 $alertText = $page['alertText'] ?? "";
 
                 $alertStyle = $page['alertStyle'] ?? "hidden";
+
+                $errors = $page['errors'] ?? [];
            
                $variables = $page['variables'] ?? [];
                $output = $this->loadTemplate($page['template'], $variables);
