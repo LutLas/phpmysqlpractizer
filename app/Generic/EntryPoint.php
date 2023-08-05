@@ -33,6 +33,8 @@ class EntryPoint {
             $controllerName = array_shift($route);
             $action = array_shift($route);
 
+            $this->website->checkLogin($controllerName . '/' . $action);
+
             if ($method === 'POST') {
                 $action .= 'Submit';
             }
@@ -65,18 +67,32 @@ class EntryPoint {
 
                $alertStyle = "noticef";
 
+               $errors = [];
+
                $output = 'Sorry, the page you are looking for could not be found.';
            }
           
-          } catch (\PDOException $e) {
+        } catch (\PDOException $e) {
               $title = 'An error has occurred';
            
               $heading = ''. $e->getCode();
+
+              $alertText = '500';
+
+              $alertStyle = "noticef";
           
               $output = 'Database error: ' . $e->getMessage() . ' in ' .
             $e->getFile() . ':' . $e->getLine();
         }
           
-        include  __DIR__ . '/../public/templates/layout.html.php';
+        $layoutVariables = $this->website->getLayoutVariables();
+        $layoutVariables['title'] = $title;
+        $layoutVariables['output'] = $output;
+        $layoutVariables['errors'] = $errors;
+        $layoutVariables['heading'] = $heading;
+        $layoutVariables['alertText'] = $alertText;
+        $layoutVariables['alertStyle'] = $alertStyle;
+
+        echo $this->loadTemplate('layout.html.php', $layoutVariables);
     }
 }

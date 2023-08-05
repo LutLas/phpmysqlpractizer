@@ -18,6 +18,13 @@
             <li><a class="customa" href="/">HOME</a></li>
             <li><a class="customa" href="/joke/list">JOKES LIST</a></li>
             <li><a class="customa" href="/joke/edit">ADD JOKE</a></li>
+
+            <?php if ($loggedIn): ?>
+            <li><a class="customa" href="/login/logout">LOG OUT</a></li>
+            <?php else: ?>
+            <li><a class="customa" href="/login/login">LOG IN</a></li>
+            <?php endif; ?>
+
         </ul>
     </nav>
 

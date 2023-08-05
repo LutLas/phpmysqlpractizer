@@ -1,3 +1,4 @@
+<?php if (empty($joke) || $userId == $joke['authorid']): ?>
 <form style="align-items: center; justify-content: center; display: flex;" action="" method="post">
   <input type="hidden" name="joke[id]" value="<?=$joke['id'] ?? ''?>">
     <table >
@@ -18,3 +19,8 @@
         </tfoot>
     </table>
 </form>
+<?php else: ?>
+
+<p>You may only edit jokes that you posted.</p>
+
+<?php endif; ?>

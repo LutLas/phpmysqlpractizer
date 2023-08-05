@@ -1,8 +1,9 @@
 <?php
 namespace Jokessite\Controllers;
 use Generic\DatabaseTable;
+use Generic\Authentication;
 class Joke {
-    public function __construct(private DatabaseTable $jokesTable, private DatabaseTable $authorsTable) {
+    public function __construct(private DatabaseTable $jokesTable, private DatabaseTable $authorsTable, private Authentication $authentication) {
 
     }
 
@@ -19,13 +20,16 @@ class Joke {
                 'joketext' => $joke['joketext'],
                 'jokedate' => $joke['jokedate'],
                 'name' => $author['name'],
-                'email' => $author['email']
+                'email' => $author['email'],
+                'authorid' => $author['id']
         ];
         }
 
         $title = 'Joke List';
 
         $totalJokes = $this->jokesTable->totalGeneric();
+
+        $user = $this->authentication->getUser();
            
         $heading = 'List of Jokes';
 
@@ -40,7 +44,8 @@ class Joke {
                 'alertStyle' => $alertStyle,
                 'variables' => [
                     'totalJokes' => $totalJokes,
-                    'jokes' => $jokes
+                    'jokes' => $jokes,
+                    'userId' => $user['id'] ?? null
                 ]
             ];
     }
@@ -55,15 +60,32 @@ class Joke {
     }
 
     public function deleteSubmit() {
+
+        $author = $this->authentication->getUser();
+      
+        $joke = $this->jokesTable->findGeneric('id', $_POST['jokeid'])[0];
+      
+        if ($joke['authorid'] != $author['id']) {
+          return;
+        }
+
         $this->jokesTable->deleteGeneric('id', $_POST['jokeid']);
 
         header('location: /joke/list');
     }
 
-    public function editSubmit() {
+    public function editSubmit($id = null) {
+            $author = $this->authentication->getUser();
+
+            if (isset($id)) {
+                $joke = $this->jokesTable->findGeneric('id', $id)[0] ?? null;
+                if ($joke['authorid'] != $author['id']) {
+                    return;
+                }
+            }
             $joke = $_POST['joke'];
             $joke['jokedate'] = new \DateTime();
-            $joke['authorId'] = 1;
+            $joke['authorid'] = $author['id'];
     
             $this->jokesTable->saveGeneric($joke);
     
@@ -74,6 +96,8 @@ class Joke {
             if (isset($id)) {
                 $joke = $this->jokesTable->findGeneric('id', $id)[0] ?? null;
             }
+
+            $author = $this->authentication->getUser();
     
             $title = 'Edit joke';
            
@@ -83,7 +107,8 @@ class Joke {
                     'title' => $title,
                     'heading' => $heading,
                     'variables' => [
-                        'joke' => $joke ?? null
+                        'joke' => $joke ?? null,
+                        'userId' => $author['id'] ?? null
                     ]
                 ];
     }

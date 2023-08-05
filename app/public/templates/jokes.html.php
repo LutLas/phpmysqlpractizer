@@ -13,15 +13,16 @@
           echo $date->format('jS F Y');
           ?>)
 
-        
-      <div>
-          <a style="margin-left: 12px;" href="/joke/edit/<?=$joke['id']?>">Edit</a>
-      </div>
+      <?php if (empty($joke) || $userId == $joke['authorid']): ?>
+            <div>
+                <a style="margin-left: 12px;" href="/joke/edit/<?=$joke['id']?>">Edit</a>
+            </div>
 
-      <form action="/joke/delete" method="post">
-        <input hidden type="text" name="jokeid" id="jokeid" value="<?= $joke['id'] ?>">
-        <input style="margin-left: 8px;" type="submit" name="submit" value="Delete">
-      </form>
+            <form action="/joke/delete" method="post">
+              <input hidden type="text" name="jokeid" id="jokeid" value="<?= $joke['id'] ?>">
+              <input style="margin-left: 8px;" type="submit" name="submit" value="Delete">
+            </form>
+      <?php endif; ?>
     </p>
   </blockquote>
 <?php endforeach; ?>
