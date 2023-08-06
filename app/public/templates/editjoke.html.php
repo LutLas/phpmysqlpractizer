@@ -1,6 +1,6 @@
-<?php if (empty($joke) || $userId == $joke['authorid']): ?>
+<?php if (empty($joke->id) || $userId == $joke->authorid): ?>
 <form style="align-items: center; justify-content: center; display: flex;" action="" method="post">
-  <input type="hidden" name="joke[id]" value="<?=$joke['id'] ?? ''?>">
+  <input type="hidden" name="joke[id]" value="<?= $joke->id ?? ''?>">
     <table >
         <thead>
             <th>
@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <td>
-                <textarea id="joketext" name="joke[joketext]" rows="3" cols="30"><?= $joke['joketext'] ?? ''?></textarea>
+                <textarea id="joketext" name="joke[joketext]" rows="3" cols="30"><?= $joke->joketext ?? ''?></textarea>
             </td>
         </tbody>
         <tfoot>

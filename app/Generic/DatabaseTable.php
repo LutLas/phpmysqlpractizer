@@ -1,7 +1,7 @@
 <?php
 namespace Generic;
 class DatabaseTable {
-    public function __construct(private \PDO $pdo, private string $table, private string $primaryKey) {
+    public function __construct(private \PDO $pdo, private string $table, private string $primaryKey, private string $className = '\stdClass', private array $constructorArgs = []) {
     }
 
     public function totalGeneric() {
@@ -20,7 +20,8 @@ class DatabaseTable {
   
       $stmt = $this->pdo->prepare($query);
       $stmt->execute($values);
-      return $stmt->fetchAll();
+
+      return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constructorArgs);
     }
 
     private function insertGeneric($values) {
@@ -79,9 +80,9 @@ class DatabaseTable {
 
     public function findAllGeneric() {
       $stmt = $this->pdo->prepare('SELECT * FROM `' . $this->table . '`');
-          $stmt->execute();
-  
-      return $stmt->fetchAll();
+      $stmt->execute();
+
+      return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constructorArgs);
     }
 
     private function processDates($values) {

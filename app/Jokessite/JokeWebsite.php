@@ -6,10 +6,11 @@ use Generic\Authentication;
 use Jokessite\Controllers\Joke;
 use Jokessite\Controllers\Author;
 use Jokessite\Controllers\Login;
+//use Jokessite\Entity\Author as AuthorEntity;
 //use Jokessite\Controllers\Error;
 class JokeWebsite implements Website {
-    private DatabaseTable $jokesTable;
-    private DatabaseTable $authorsTable;
+    private ?DatabaseTable $jokesTable;
+    private ?DatabaseTable $authorsTable;
     private Authentication $authentication;
 
     public function __construct() {
@@ -23,8 +24,8 @@ class JokeWebsite implements Website {
             die("Unexpected Error Code:".$e->getCode());
         }
       
-        $this->jokesTable = new DatabaseTable($pdo, 'joke', 'id');
-        $this->authorsTable = new DatabaseTable($pdo, 'author', 'id');
+        $this->jokesTable = new DatabaseTable($pdo, 'joke', 'id', '\Jokessite\Entity\Joke', [&$this->authorsTable]);
+        $this->authorsTable = new DatabaseTable($pdo, 'author', 'id', '\Jokessite\Entity\Author', [&$this->jokesTable]);
         $this->authentication = new Authentication($this->authorsTable, 'email', 'password');
     }
 
