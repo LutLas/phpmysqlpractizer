@@ -80,6 +80,8 @@ class EntryPoint {
               $alertText = '500';
 
               $alertStyle = "noticef";
+
+              $errors = ['Database Error'];
           
               $output = 'Database error: ' . $e->getMessage() . ' in ' .
             $e->getFile() . ':' . $e->getLine();

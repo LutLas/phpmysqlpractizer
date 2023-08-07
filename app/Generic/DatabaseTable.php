@@ -47,6 +47,8 @@ class DatabaseTable {
   
           $stmt = $this->pdo->prepare($query);
           $stmt->execute($values);
+          
+          return $this->pdo->lastInsertId();
     }
 
     private function updateGeneric($values) {
@@ -96,14 +98,28 @@ class DatabaseTable {
     }
 
     public function saveGeneric($record) {
+      $entity = new $this->className(...$this->constructorArgs);
       try {
           if (empty($record[$this->primaryKey])) {
             unset($record[$this->primaryKey]);
           }
-          $this->insertGeneric($record);
+          $insertId = $this->insertGeneric($record);
+
+          $entity->{$this->primaryKey} = $insertId;
       }
       catch (\PDOException $e) {
         $this->updateGeneric($record);
       }
+
+      foreach ($record as $key => $value) {
+        if (!empty($value)) {
+          if ($value instanceof \DateTime) {
+            $value = $value->format('Y-m-d H:i:s');
+          }
+          $entity->$key = $value;
+        }
+      }
+
+      return $entity;
     }
 }

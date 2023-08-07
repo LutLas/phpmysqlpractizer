@@ -10,7 +10,7 @@ class Joke {
     public string $joketext;
     private ?Author $author;
 
-    public function __construct(private DatabaseTable $authorsTable) {
+    public function __construct(private DatabaseTable $authorsTable, private DatabaseTable $jokeCategoriesTable) {
     }
 
     public function getAuthor() {
@@ -20,5 +20,11 @@ class Joke {
         }
       
         return $this->author;
+    }
+    
+    public function addCategory($categoryId) {
+      $jokeCat = ['jokeid' => $this->id, 'categoryid' => $categoryId];
+    
+      $this->jokeCategoriesTable->saveGeneric($jokeCat);
     }
 }

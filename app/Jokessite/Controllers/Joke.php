@@ -2,36 +2,41 @@
 namespace Jokessite\Controllers;
 use Generic\DatabaseTable;
 use Generic\Authentication;
-//use Jokessite\Entity\Author;
+//use Jokessite\Entity\Joke as JokeEntity;
+//use Jokessite\Entity\Author as AuthorEntity;
 class Joke {
-    public function __construct(private DatabaseTable $jokesTable, private DatabaseTable $authorsTable, private Authentication $authentication) {
+    public function __construct(private DatabaseTable $jokesTable, private DatabaseTable $authorsTable, private DatabaseTable $categoriesTable, private Authentication $authentication) {
 
     }
 
-    public function list() {
+    public function list($categoryId = null) {
+        $categories = $this->categoriesTable->findAllGeneric();
         $jokes = $this->jokesTable->findAllGeneric();
 
-        $title = 'Joke List';
+        foreach ($categories as $categoryEntity) {
+            if (!empty($categoryId) && $categoryEntity->id == $categoryId) {
+                $category = $this->categoriesTable->findGeneric('id', $categoryId)[0];
+
+                $jokes = $category->getJokes();
+            }
+        }
 
         $totalJokes = $this->jokesTable->totalGeneric();
 
         $user = $this->authentication->getUser();
-           
-        $heading = 'List of Jokes';
 
         $alertText = $totalJokes. ' jokes have been submitted to the Internet Joke Database.';
 
-        $alertStyle = 'noticep';
-
         return ['template' => 'jokes.html.php', 
-                'title' => $title,
-                'heading' => $heading,
+                'title' => 'Joke List',
+                'heading' => 'List of Jokes',
                 'alertText' => $alertText,
-                'alertStyle' => $alertStyle,
+                'alertStyle' => 'noticep',
                 'variables' => [
                     'totalJokes' => $totalJokes,
                     'jokes' => $jokes,
-                    'userId' => $user->id ?? null
+                    'userId' => $user->id ?? null,
+                    'categories' => $categories
                 ]
             ];
     }
@@ -76,28 +81,37 @@ class Joke {
             $joke['jokedate'] = new \DateTime();
 
             // Save the joke using the new addJoke method
-            $author->addJoke($joke);
+            $jokeEntity = $author->addJoke($joke);
+
+            foreach ($_POST['category'] as $categoryId) {
+              $jokeEntity->addCategory($categoryId);
+            }
     
             header('location: /joke/list');  
     }
 
     function edit($id = null) {
-            if (isset($id)) {
-                $joke = $this->jokesTable->findGeneric('id', $id)[0] ?? null;
-            }
+        $author = $this->authentication->getUser();
+        $categories = $this->categoriesTable->findAllGeneric();
 
-            $author = $this->authentication->getUser();
-    
-            $title = 'Edit joke';
+        if (!empty($id)){
+          $joke = $this->jokesTable->findGeneric('id', $id);
            
-            $heading = 'Joke Modification Page';
-
+          $heading = 'Editing Joke No:'.$id;
+        }
+        else {
+          $joke = null;
+           
+          $heading = 'Joke Modification Page';
+        }
+        
             return ['template' => 'editjoke.html.php', 
-                    'title' => $title,
+                    'title' => 'Edit Joke',
                     'heading' => $heading,
                     'variables' => [
                         'joke' => $joke ?? null,
-                        'userId' => $author->id ?? null
+                        'userId' => $author->id ?? null,
+                        'categories' => $categories
                     ]
                 ];
     }

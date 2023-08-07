@@ -26,11 +26,13 @@ body {
 }
 
 .customa {
-  background: rgb(83, 47, 118);
+  background: transparent;
   /* Make it white if you need */
   color: #ffffff;
-  padding: 5px;
-  margin: 5px;
+  text-decoration: none;
+  margin: 6px;
+  padding: 2px;
+  border: 2px solid #ffffff;
 }
 
 .noticep {
@@ -65,6 +67,16 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 5px;
+}
+
+.navmaster2{
+  background-color: white; 
+  color: black; 
+  text-decoration: none;
+  font: 0.9em sans-serif;
+  padding: 1.5px;
+  border: 2px solid rgb(3, 198, 0);
 }
 
 .errors {
@@ -84,7 +96,14 @@ footer {
   background: rgb(83, 47, 118);
   /* Make it white if you need */
   color: white;
-  margin: 0;
+  margin: 0px;
   padding: 8px;
   text-align: center;
 }
+
+/* 
+.jokelist {display: table;}
+.categories {display: table-cell; width: 20%; background-color: #333; padding: 1em; list-style-type: none;}
+.categories a {color: white; text-decoration: none;}
+.categories li {margin-bottom: 1em;}
+*/

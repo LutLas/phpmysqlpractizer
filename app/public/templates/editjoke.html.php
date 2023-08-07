@@ -4,13 +4,32 @@
     <table >
         <thead>
             <th>
-                <label for="joketext">Edit your joke here:</label>
             </th>
         </thead>
         <tbody>
+            <tr>
+                <tr>
+                    <th>
+                <label for="joketext">Edit Your Joke Here:</label>
+                    </th>
+                </tr>
             <td>
                 <textarea id="joketext" name="joke[joketext]" rows="3" cols="30"><?= $joke->joketext ?? ''?></textarea>
             </td>
+                <tr>
+            <td>
+                <p>Select categories for this joke:</p>
+                <?php foreach ($categories as $category): ?>
+                <input type="checkbox" name="category[]" value="<?= $category->id ?>" /> <label><?= $category->name ?></label>
+
+                <?php endforeach; ?>
+            </td>
+                </tr>
+                <tr style="margin-bottom: 8px;">
+                    <td>
+                        <small></small>
+                    </td>
+                </tr>
         </tbody>
         <tfoot>
             <td>

@@ -1,3 +1,8 @@
+
+  <?php foreach ($categories as $category): ?>
+    <a class="navmaster2" href="/joke/list/<?=$category->id?>"><?=$category->name?></a>
+  <?php endforeach; ?>
+
 <?php foreach ($jokes as $joke) : ?>
   <blockquote style="align-items: center; justify-content: center; display: flex; border-bottom: 1px solid #ccc;">
     <p>
