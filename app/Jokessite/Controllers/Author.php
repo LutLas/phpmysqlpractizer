@@ -1,14 +1,27 @@
 <?php
 namespace Jokessite\Controllers;
 use Generic\DatabaseTable;
+//use Jokessite\Entity\Author as AuthorEntity;
 class Author {
     public function __construct(private DatabaseTable $authorsTable) {
+    }
+    
+    public function list() {
+      $authors = $this->authorsTable->findAllGeneric();
+    
+      return ['template' => 'authorlist.html.php',
+        'title' => 'Author List',
+        'heading' => 'User List',
+        'variables' => [
+          'authors' => $authors
+        ]
+      ];
     }
 
     public function registrationForm() {
         return [
           'template' => 'register.html.php',
-            'title' => 'Register an account',
+            'title' => 'Register An Account',
             'heading' => 'User Account Registration Form'
          ];
     }
@@ -82,6 +95,56 @@ class Author {
                   ]
                 ];
           }
+    }
+
+    public function permissions($id = null) {
+
+      $author = $this->authorsTable->findGeneric('id', $id)[0];
+    
+      $reflected = new \ReflectionClass('\Jokessite\Entity\Author');
+      $constants = $reflected->getConstants();
+    
+      return ['template' => 'permissions.html.php',
+        'title' => 'Edit Permissions',
+        'heading' => 'Permissions For '.$author->name,
+        'variables' => [
+          'author' => $author,
+          'permissions' => $constants
+        ]
+      ];
+    }
+
+    public function permissionsSubmit($id = null) {
+      
+      $author = $this->authorsTable->findGeneric('id', $id)[0];
+      $reflected = new \ReflectionClass('\Jokessite\Entity\Author');
+      $constants = $reflected->getConstants();
+
+      if ($author->id == $id) {
+        # code...
+        $updatedAuthor = [
+          'id' => $author->id,
+          'permissions' => array_sum($_POST['permissions'] ?? [])
+        ];
+      
+        $this->authorsTable->saveGeneric($updatedAuthor);
+      
+        header('location: /author/list');
+      }else {
+        # code...
+        $errors[] = 'Password is Required';
+        return ['template' => 'permissions.html.php',
+          'title' => 'Edit Permissions',
+          'heading' => 'Permissions For '.$author->name,
+          'alertText' => 'Unsuccessful Due To Invalid Action.',
+          'alertStyle' => 'noticef',
+          'errors' => $errors,
+          'variables' => [
+            'author' => $author,
+            'permissions' => $constants
+          ]
+        ];
       }
+    }
       
 }

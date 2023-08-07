@@ -17,16 +17,19 @@
           
           echo $date->format('jS F Y');
           ?>)
+      <?php if ($user): ?>
+            <?php if (empty($joke) || $user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::EDIT_JOKE)): ?>
+                  <div>
+                      <a style="margin-left: 12px;" href="/joke/edit/<?= $joke->id?>">Edit</a>
+                  </div>
+            <?php endif; ?>
+            <?php if ($user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::DELETE_JOKE)): ?>
 
-      <?php if (empty($joke->id) || $userId == $joke->authorid): ?>
-            <div>
-                <a style="margin-left: 12px;" href="/joke/edit/<?= $joke->id?>">Edit</a>
-            </div>
-
-            <form action="/joke/delete" method="post">
-              <input hidden type="text" name="jokeid" id="jokeid" value="<?= $joke->id ?>">
-              <input style="margin-left: 8px;" type="submit" name="submit" value="Delete">
-            </form>
+                  <form action="/joke/delete" method="post">
+                    <input hidden type="text" name="jokeid" id="jokeid" value="<?= $joke->id ?>">
+                    <input style="margin-left: 8px;" type="submit" name="submit" value="Delete">
+                  </form>
+            <?php endif; ?>
       <?php endif; ?>
     </p>
   </blockquote>

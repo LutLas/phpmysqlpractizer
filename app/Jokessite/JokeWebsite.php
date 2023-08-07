@@ -7,7 +7,7 @@ use Jokessite\Controllers\Joke;
 use Jokessite\Controllers\Author;
 use Jokessite\Controllers\Login;
 use Jokessite\Controllers\Category;
-//use Jokessite\Entity\Author as AuthorEntity;
+use Jokessite\Entity\Author as AuthorEntity;
 //use Jokessite\Controllers\Error;
 class JokeWebsite implements Website {
     private ?DatabaseTable $jokesTable;
@@ -42,15 +42,28 @@ class JokeWebsite implements Website {
     }
 
     public function checkLogin(string $uri): ?string {
-        $restrictedPages = ['joke/edit', 'joke/delete'];
+        $restrictedPages = [
+            'category/list' => AuthorEntity::LIST_CATEGORIES,
+            'category/delete' => AuthorEntity::DELETE_CATEGORY,
+            'category/edit' => AuthorEntity::EDIT_CATEGORY,
+            'author/permissions' => AuthorEntity::EDIT_USER_ACCESS,
+            'author/list' => AuthorEntity::EDIT_USER_ACCESS
+           ];
 
-        if (in_array($uri, $restrictedPages) && !$this->authentication->isLoggedIn()) {
-            header('location: /login/login');
-            exit();
+        if (isset($restrictedPages[$uri])) {
+            if (
+                !$this->authentication->isLoggedIn() || 
+                !$this->authentication->getUser()->hasPermission($restrictedPages[$uri])
+            ) {
+                header('location: /login/login');
+                exit();
+            }
         }
 
         return $uri;
     }
+
+
 
     public function getDefaultRoute(): string {
         return 'joke/home';

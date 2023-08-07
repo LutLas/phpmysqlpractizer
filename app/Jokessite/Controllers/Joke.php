@@ -3,7 +3,7 @@ namespace Jokessite\Controllers;
 use Generic\DatabaseTable;
 use Generic\Authentication;
 //use Jokessite\Entity\Joke as JokeEntity;
-//use Jokessite\Entity\Author as AuthorEntity;
+use Jokessite\Entity\Author as AuthorEntity;
 class Joke {
     public function __construct(private DatabaseTable $jokesTable, private DatabaseTable $authorsTable, private DatabaseTable $categoriesTable, private Authentication $authentication) {
 
@@ -35,7 +35,7 @@ class Joke {
                 'variables' => [
                     'totalJokes' => $totalJokes,
                     'jokes' => $jokes,
-                    'userId' => $user->id ?? null,
+                    'user' => $user, //previously $user->id ?? null,
                     'categories' => $categories
                 ]
             ];
@@ -56,7 +56,7 @@ class Joke {
       
         $joke = $this->jokesTable->findGeneric('id', $_POST['jokeid'])[0];
       
-        if ($joke->authorid != $author->id) {
+        if ($joke->authorid != $author->id && !$author->hasPermission(AuthorEntity::DELETE_JOKE)) {
           return;
         }
 
@@ -68,6 +68,11 @@ class Joke {
     public function editSubmit() {
             // Get the currently logged in user as the $author to associate the joke with
             $author = $this->authentication->getUser();
+
+            if (is_null($author)) {
+                # code...
+                header('location: /login/login'); 
+            }
 
             if (!empty($id)) {
               $joke = $this->jokesTable->findGeneric('id', $id)[0];
@@ -115,7 +120,7 @@ class Joke {
                     'heading' => $heading,
                     'variables' => [
                         'joke' => $joke ?? null,
-                        'userId' => $author->id ?? null,
+                        'user' => $author ?? null,
                         'categories' => $categories
                     ]
                 ];

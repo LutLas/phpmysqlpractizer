@@ -1,4 +1,4 @@
-<?php if (empty($joke->id) || $userId == $joke->authorid): ?>
+<?php if (empty($joke->id) || $user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::EDIT_JOKE)): ?>
 <form style="align-items: center; justify-content: center; display: flex;" action="" method="post">
   <input type="hidden" name="joke[id]" value="<?= $joke->id ?? ''?>">
     <table >
