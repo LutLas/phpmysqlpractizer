@@ -93,17 +93,20 @@ class Joke {
     function edit($id = null) {
         $author = $this->authentication->getUser();
         $categories = $this->categoriesTable->findAllGeneric();
+        $jokes = $this->jokesTable->findAllGeneric();
+        
+        $joke = null;
+        $heading = 'Joke Modification Page';
 
-        if (!empty($id)){
-          $joke = $this->jokesTable->findGeneric('id', $id);
-           
-          $heading = 'Editing Joke No:'.$id;
-        }
-        else {
-          $joke = null;
-           
-          $heading = 'Joke Modification Page';
-        }
+        
+            foreach ($jokes as $jokeEntity) {
+                # code...
+                if (!empty($id) && $jokeEntity->id == $id){
+                    $joke = $this->jokesTable->findGeneric('id', $id)[0];
+                     
+                    $heading = 'Editing Joke No:'.$id;
+                }
+            }
         
             return ['template' => 'editjoke.html.php', 
                     'title' => 'Edit Joke',

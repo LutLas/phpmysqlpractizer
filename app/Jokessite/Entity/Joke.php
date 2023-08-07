@@ -27,4 +27,15 @@ class Joke {
     
       $this->jokeCategoriesTable->saveGeneric($jokeCat);
     }
+
+    public function hasCategory($categoryId):bool {
+      $jokeCategories = $this->jokeCategoriesTable->findGeneric('jokeid', $this->id);
+    
+      foreach ($jokeCategories as $jokeCategory) {
+        if ($jokeCategory->categoryid == $categoryId) {
+          return true;
+        }
+      }
+      return false;
+    }
 }
