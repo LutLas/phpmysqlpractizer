@@ -98,15 +98,26 @@ class Author {
     }
 
     public function permissions($id = null) {
+      
+      $authors = $this->authorsTable->findAllGeneric();
+      $heading = 'Failed To Fetch Data';
+      $author = null;
 
-      $author = $this->authorsTable->findGeneric('id', $id)[0];
+      foreach ($authors as $authorEntity) {
+        # code...
+        if ($authorEntity->id == $id) {
+          # code...
+          $author = $this->authorsTable->findGeneric('id', $id)[0];
+          $heading = 'Permissions For '.$author->name;
+        }
+      }
     
       $reflected = new \ReflectionClass('\Jokessite\Entity\Author');
       $constants = $reflected->getConstants();
     
       return ['template' => 'permissions.html.php',
         'title' => 'Edit Permissions',
-        'heading' => 'Permissions For '.$author->name,
+        'heading' => $heading,
         'variables' => [
           'author' => $author,
           'permissions' => $constants
@@ -114,28 +125,37 @@ class Author {
       ];
     }
 
-    public function permissionsSubmit($id = null) {
-      
-      $author = $this->authorsTable->findGeneric('id', $id)[0];
-      $reflected = new \ReflectionClass('\Jokessite\Entity\Author');
-      $constants = $reflected->getConstants();
 
-      if ($author->id == $id) {
-        # code...
-        $updatedAuthor = [
-          'id' => $author->id,
-          'permissions' => array_sum($_POST['permissions'] ?? [])
-        ];
+    public function permissionsSubmit() {
       
-        $this->authorsTable->saveGeneric($updatedAuthor);
-      
-        header('location: /author/list');
-      }else {
+      $authors = $this->authorsTable->findAllGeneric();
+      $heading = 'Failed To Fetch Data';
+      $author = null;
+
+      foreach ($authors as $authorEntity) {
         # code...
-        $errors[] = 'Password is Required';
-        return ['template' => 'permissions.html.php',
+        if ($authorEntity->id == $_POST['authorid']) {
+
+          $author = [
+            'id' => $_POST['authorid'],
+            'permissions' => array_sum($_POST['permissions'] ?? [])
+          ];
+        
+          $this->authorsTable->saveGeneric($author);
+        
+          header('location: /author/list');
+          exit;
+        }
+      }
+    
+        $reflected = new \ReflectionClass('\Jokessite\Entity\Author');
+        $constants = $reflected->getConstants();
+        $errors[] = 'Invalid Action/Request Detected';
+      
+        return [
+          'template' => 'permissions.html.php',
           'title' => 'Edit Permissions',
-          'heading' => 'Permissions For '.$author->name,
+          'heading' => $heading,
           'alertText' => 'Unsuccessful Due To Invalid Action.',
           'alertStyle' => 'noticef',
           'errors' => $errors,
@@ -144,7 +164,6 @@ class Author {
             'permissions' => $constants
           ]
         ];
-      }
     }
       
 }
