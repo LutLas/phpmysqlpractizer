@@ -83,6 +83,8 @@ class Joke {
             // Save the joke using the new addJoke method
             $jokeEntity = $author->addJoke($joke);
 
+            $jokeEntity->clearCategories();
+
             foreach ($_POST['category'] as $categoryId) {
               $jokeEntity->addCategory($categoryId);
             }

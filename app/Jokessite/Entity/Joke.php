@@ -38,4 +38,8 @@ class Joke {
       }
       return false;
     }
+    
+    public function clearCategories() {
+      $this->jokeCategoriesTable->deleteGeneric('jokeid', $this->id);
+    }
 }
