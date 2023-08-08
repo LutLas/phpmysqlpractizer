@@ -73,7 +73,7 @@ class JokeWebsite implements Website {
         
         $controllers = [
             'joke' => new Joke($this->jokesTable, $this->authorsTable, $this->categoriesTable, $this->authentication),
-            'author' => new Author($this->authorsTable),
+            'author' => new Author($this->authorsTable, $this->authentication),
             'login' => new Login($this->authentication),
             'category' => new Category($this->categoriesTable)
         ];

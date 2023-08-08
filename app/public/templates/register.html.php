@@ -74,7 +74,7 @@
         </tbody>
         <tfoot>
             <td>
-                <input type="submit" name="submit" value="Register Account">
+                <input class="navmaster2" type="submit" name="submit" value="Register Account">
             </td>
         </tfoot>
     </table>

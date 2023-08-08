@@ -17,7 +17,6 @@
         <ul class="navmaster">
             <li><a class="customa" href="/">HOME</a></li>
             <li><a class="customa" href="/joke/list">JOKES LIST</a></li>
-            <li><a class="customa" href="/joke/edit">ADD JOKE</a></li>
 
             <?php if ($loggedIn): ?>
             <li><a class="customa" href="/login/logout">LOG OUT</a></li>

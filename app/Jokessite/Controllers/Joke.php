@@ -25,7 +25,9 @@ class Joke {
 
         $user = $this->authentication->getUser();
 
-        $alertText = $totalJokes. ' jokes have been submitted to the Internet Joke Database.';
+        $link = '<a class="navmaster2" href="/joke/edit">Add Joke</a>';
+
+        $alertText = $link.' '.$totalJokes. ' jokes have been submitted to the Internet Joke Database.';
 
         return ['template' => 'jokes.html.php', 
                 'title' => 'Joke List',

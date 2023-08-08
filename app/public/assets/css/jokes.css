@@ -88,6 +88,15 @@ body {
   border: 2px solid rgb(206, 174, 31);
 }
 
+.navmasterRed{
+  background-color: white; 
+  color: black; 
+  text-decoration: none;
+  font: 0.9em sans-serif;
+  padding: 1.5px;
+  border: 2px solid rgb(206, 31, 31);
+}
+
 .tablemaster{
   background: rgb(253, 238, 241);
   align-items: center; 
@@ -107,6 +116,11 @@ body {
   border-top: 1px solid #080034;
   padding-top: 2.5px;
   padding-bottom: 2.5px;
+}
+
+.blockquoter{
+  border-top: 2px solid #ccc;
+  background-color: rgb(224, 255, 247);
 }
 
 .errors {

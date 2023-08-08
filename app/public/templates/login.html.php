@@ -40,7 +40,7 @@
         </tbody>
         <tfoot>
             <td>
-                <input type="submit" name="submit" value="Login">
+                <input class="navmaster2" type="submit" name="submit" value="Login">
 
                 <p>Don't have an account? <a href="/author/registrationform">Click here to register</a></p>
             </td>

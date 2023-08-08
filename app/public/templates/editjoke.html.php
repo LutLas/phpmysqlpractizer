@@ -39,7 +39,7 @@
         </tbody>
         <tfoot>
             <td>
-                <input type="submit" name="submit" value="Save">
+                <input class="navmaster2" type="submit" name="submit" value="Save">
             </td>
         </tfoot>
     </table>

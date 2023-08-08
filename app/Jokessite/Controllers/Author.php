@@ -1,19 +1,23 @@
 <?php
 namespace Jokessite\Controllers;
 use Generic\DatabaseTable;
+use Generic\Authentication;
 //use Jokessite\Entity\Author as AuthorEntity;
 class Author {
-    public function __construct(private DatabaseTable $authorsTable) {
+    public function __construct(private DatabaseTable $authorsTable, private Authentication $authentication) {
     }
     
     public function list() {
       $authors = $this->authorsTable->findAllGeneric();
+
+      $user = $this->authentication->getUser();
     
       return ['template' => 'authorlist.html.php',
         'title' => 'Author List',
         'heading' => 'User List',
         'variables' => [
-          'authors' => $authors
+          'authors' => $authors,
+          'user'=> $user
         ]
       ];
     }
