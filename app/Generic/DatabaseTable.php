@@ -4,19 +4,40 @@ class DatabaseTable {
     public function __construct(private \PDO $pdo, private string $table, private string $primaryKey, private string $className = '\stdClass', private array $constructorArgs = []) {
     }
 
-    public function totalGeneric() {
-      $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM `' .  $this->table . '`');
-          $stmt->execute();
+    public function totalGeneric(string $field = null, string $value = null) {
+      $query = 'SELECT COUNT(*) FROM `' . $this->table . '`';
+
+      $values = [];
+    
+      if (!empty($field)) {
+        $query .= ' WHERE `' . $field . '` = :value';
+        $values = [
+          'value' => $value
+        ];
+      }
+    
+      $stmt = $this->pdo->prepare($query);
+
+      $stmt->execute($values);
       $row = $stmt->fetch();
+
       return $row[0];
     }
 
-    public function findGeneric($field, $value) {
+    public function findGeneric(string $field, string $value, string $orderBy = null, int $limit = 0) {
       $query = 'SELECT * FROM `' . $this->table . '` WHERE `' . $field . '` = :value';
   
       $values = [
           'value' => $value
       ];
+
+      if ($orderBy != null) {
+        $query .= ' ORDER BY ' . $orderBy;
+      }
+
+      if ($limit > 0) {
+          $query .= ' LIMIT ' . $limit;
+      }
   
       $stmt = $this->pdo->prepare($query);
       $stmt->execute($values);
@@ -80,8 +101,23 @@ class DatabaseTable {
       $stmt->execute($values);
     }
 
-    public function findAllGeneric() {
-      $stmt = $this->pdo->prepare('SELECT * FROM `' . $this->table . '`');
+    public function findAllGeneric($orderBy = null, int $limit = 0, int $offset = 0) {
+      $query = 'SELECT * FROM `' . $this->table . '`';
+
+      if ($orderBy != null) {
+        $query .= ' ORDER BY ' . $orderBy;
+      }
+
+      if ($limit > 0) {
+          $query .= ' LIMIT ' . $limit;
+      }
+
+      if ($offset > 0) {
+        $query .= ' OFFSET ' . $offset;
+      }
+
+      $stmt = $this->pdo->prepare($query);
+
       $stmt->execute();
 
       return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constructorArgs);

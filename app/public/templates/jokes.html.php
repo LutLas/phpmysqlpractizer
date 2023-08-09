@@ -2,7 +2,7 @@
     <?php foreach ($categories as $category): ?>
       <a class="navmaster2" href="/joke/list/<?=$category->id?>"><?=$category->name?></a>
     <?php endforeach; ?>
-  <div>
+<div>
 
 <?php foreach ($jokes as $joke) : ?>
   <blockquote class="blockquoter">
@@ -15,7 +15,7 @@
           'UTF-8'); ?></a> on <?php
           $date = new DateTime($joke->jokedate);
           
-          echo $date->format('jS F Y');
+          echo $date->format('jS F Y H:i:s');
           ?>)
       <?php if ($user): ?>
             <?php if (empty($joke) || $user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::EDIT_JOKE)): ?>
@@ -34,3 +34,16 @@
       <?php endif; ?>
   </blockquote>
 <?php endforeach; ?>
+
+Select Page:
+<?php
+// Calculate the number of pages
+$numPages = ceil($totalJokes/10);
+
+for ($i = 1; $i <= $numPages; $i++):
+  if ($i == $currentPage):?>
+    <a class="navmaster2" href="/joke/list?page=<?=$i?>"><?=$i?></a>
+  <?php else: ?>
+    <a class="navmasterBlue" href="/joke/list/<?=$categoryId?>/<?=$i?>"><?=$i?></a>
+  <?php endif; ?>
+<?php endfor; ?>

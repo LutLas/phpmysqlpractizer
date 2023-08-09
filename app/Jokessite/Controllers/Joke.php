@@ -9,19 +9,33 @@ class Joke {
 
     }
 
-    public function list($categoryId = null) {
+    public function list(mixed $categoryId = null, int $page = 0) {
+        $offset = ($page-1)*10;
+
         $categories = $this->categoriesTable->findAllGeneric();
-        $jokes = $this->jokesTable->findAllGeneric();
+        $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 10, $offset);
+
+        $totalJokes = $this->jokesTable->totalGeneric();
+
 
         foreach ($categories as $categoryEntity) {
             if (!empty($categoryId) && $categoryEntity->id == $categoryId) {
                 $category = $this->categoriesTable->findGeneric('id', $categoryId)[0];
-
-                $jokes = $category->getJokes();
+                $jokes = $category->getJokes(10,$offset);
+                $totalJokes = $category->getNumJokes();
             }
         }
 
-        $totalJokes = $this->jokesTable->totalGeneric();
+       /* if (is_numeric($categoryId)) {
+            $category = $this->categoriesTable->findGeneric('id', $categoryId)[0] ?? null;
+            $jokes = $category->getJokes(10, $offset);
+            $totalJokes = $category->getNumJokes();
+          }
+          else {
+            $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 10, $offset);
+            $totalJokes = $this->jokesTable->totalGeneric();
+          } */  
+        
 
         $user = $this->authentication->getUser();
 
@@ -38,7 +52,9 @@ class Joke {
                     'totalJokes' => $totalJokes,
                     'jokes' => $jokes,
                     'user' => $user, //previously $user->id ?? null,
-                    'categories' => $categories
+                    'categories' => $categories,
+                    'currentPage' => $page,
+                    'categoryId' => $categoryId
                 ]
             ];
     }
@@ -92,8 +108,11 @@ class Joke {
 
             $jokeEntity->clearCategories();
 
-            foreach ($_POST['category'] as $categoryId) {
-              $jokeEntity->addCategory($categoryId);
+            if (isset($_POST['category'])) {
+                # code...
+                foreach ($_POST['category'] as $categoryId) {
+                    $jokeEntity->addCategory($categoryId);
+                }
             }
     
             header('location: /joke/list');  

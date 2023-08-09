@@ -9,8 +9,8 @@ class Category {
     public function __construct(private ?DatabaseTable $jokesTable, private ?DatabaseTable $jokeCategoriesTable) {
     }
 
-    public function getJokes() {
-        $jokeCategories = $this->jokeCategoriesTable->findGeneric('categoryid', $this->id);
+    public function getJokes(int $limit = 0, int $offset = 0) {
+        $jokeCategories = $this->jokeCategoriesTable->findGeneric('categoryid', $this->id, null, $limit, $offset);
 
         $jokes = [];
 
@@ -21,6 +21,23 @@ class Category {
             }
         }
 
+        usort($jokes, [$this, 'sortJokes']);
+
         return $jokes;
+    }
+
+    public function getNumJokes() {
+        return $this->jokeCategoriesTable->totalGeneric('categoryid', $this->id);
+    }
+    
+    private function sortJokes($a, $b) {
+        $aDate = new \DateTime($a->jokedate);
+        $bDate = new \DateTime($b->jokedate);
+    
+        if ($aDate->getTimestamp() == $bDate->getTimestamp()) {
+        return 0;
+        }
+    
+        return $aDate->getTimestamp() > $bDate->getTimestamp() ? -1 : 1;
     }
 }
