@@ -44,6 +44,20 @@
         <?php endif; ?>
         <?= $output ?>
     </main>
+    <div class="music-player">
+
+   <i class="fas fa-times" id="close"></i>
+
+   <div class="box">
+      <div class="title"></div>
+      <img src="" class="album" alt="">
+      <div class="name"></div>
+      <div class="artist"></div>
+      <audio src="" controls class="music"></audio>
+   </div>
+
+</div>
+
 
     <footer>
         &copy; LUTLAS <?= date('Y') ?>

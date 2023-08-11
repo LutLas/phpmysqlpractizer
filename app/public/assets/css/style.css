@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
 @font-face {
   font-family: "novasquare";
-  src: url("fonts/NovaSquare-Regular")
+  src: url("/assets/fonts/NovaSquare-Regular.ttf")
 }
 
 :root{
@@ -174,7 +174,7 @@ section{
 
 .playlist .box-container .box .title{
   font-family: "novasquare";
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color:var(--black);
 }
 
@@ -263,7 +263,7 @@ section{
 
 .music-player .box .title{
   font-family: "novasquare";
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color:var(--black);
 }
 

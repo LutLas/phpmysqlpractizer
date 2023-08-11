@@ -13,7 +13,7 @@
             'UTF-8'); ?></div>
 
         <?php if (!empty($joke->albumcover)): ?>
-         <img src="uploaded_album/<?= $joke->albumcover; ?>" alt="" class="album">
+         <img src="<?= $joke->albumcover; ?>" alt="" class="album">
         <?php else: ?>
          <img src="/../assets/images/disc.png" alt="" class="album">
         <?php endif; ?>
@@ -50,8 +50,8 @@
               <?php endif; ?>
         <?php endif; ?>
         <div class="flex">
-         <div class="play" data-src="uploaded_music/<?= $joke->song; ?>"><i class="fas fa-play"></i><span>play</span></div>
-         <a href="uploaded_music/<?= $joke->song; ?>" download><i class="fas fa-download"></i><span>download</span></a>
+         <div class="play" data-src="<?= $joke->song; ?>"><i class="fas fa-play"></i><span>play</span></div>
+         <a href="<?= $joke->song; ?>" download><i class="fas fa-download"></i><span>download</span></a>
       </div>
     </div>
   <?php endforeach; ?>
