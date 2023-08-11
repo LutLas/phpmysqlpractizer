@@ -8,6 +8,14 @@ class Joke {
     public int $authorid;
     public string $jokedate;
     public string $joketext;
+
+    public string $joketitle;
+    public string $artistname;
+    public string $albumcover;
+    public string $albumname;
+    public string $song;
+    public string $datetimepublished;
+
     private ?Author $author;
 
     public function __construct(private DatabaseTable $authorsTable, private DatabaseTable $jokeCategoriesTable) {
