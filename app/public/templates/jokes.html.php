@@ -51,7 +51,7 @@
         <?php endif; ?>
         <div class="flex">
          <div class="play" data-src="<?= $joke->song; ?>"><i class="fas fa-play"></i><span>play</span></div>
-         <a href="<?= $joke->song; ?>" download><i class="fas fa-download"></i><span>download</span></a>
+         <!-- <a href="<?= $joke->song; ?>" download><i class="fas fa-download"></i><span>download</span></a> -->
       </div>
     </div>
   <?php endforeach; ?>

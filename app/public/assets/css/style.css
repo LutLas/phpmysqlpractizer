@@ -1,8 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap'); */
 @font-face {
   font-family: "novasquare";
-  src: url("/assets/fonts/NovaSquare-Regular.ttf")
+  src: url("/assets/fonts/Nova_Square/NovaSquare-Regular.ttf")
 }
+@font-face {
+   font-family: "Nunito";
+   src: url("/assets/fonts/Nunito/Nunito-VariableFont_wght.ttf")
+   format("woff2-variations");
+      font-weight: 125 950;
+      font-stretch: 75% 125%;
+      font-style: oblique 0deg 20deg;
+ }
 
 :root{
    --main-color:#8e44ad;

@@ -9,7 +9,7 @@
     <title><?= $title ?></title>
 
 <!-- font awesome cdn link  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="/assets/libs/font-awesome-5.14.0/css/all.min.css">
 </head>
 
 <body>
@@ -46,23 +46,21 @@
     </main>
     <div class="music-player">
 
-   <i class="fas fa-times" id="close"></i>
+        <i class="fas fa-times" id="close"></i>
 
-   <div class="box">
-      <div class="title"></div>
-      <img src="" class="album" alt="">
-      <div class="name"></div>
-      <div class="artist"></div>
-      <audio src="" controls class="music"></audio>
-   </div>
+    </div>
 
-</div>
+    <div id="container">
+
+    </div>
 
 
     <footer>
         &copy; LUTLAS <?= date('Y') ?>
     </footer>
     <script src="/assets/js/script.js"></script>
+    <script src="/assets/libs/ruffle/ruffle.js"></script>
+    <script src="/assets/libs/jquery-3.6.0/jquery.slim.min.js"></script>
 </body>
 
 </html>
