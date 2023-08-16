@@ -14,13 +14,13 @@
 
 <body>
 
-    <header>
-        <h2><?= $heading ?></h2>
+    <header class="centermaster">
+        <h2 style="padding:8px; "><?= $heading ?></h2>
     </header>
     <nav>
         <ul class="navmaster">
             <li><a class="customa" href="/">HOME</a></li>
-            <li><a class="customa" href="/joke/list">JOKES LIST</a></li>
+            <li><a class="customa" href="/joke/list">MUSIC LIST</a></li>
 
             <?php if ($loggedIn): ?>
             <li><a class="customa" href="/login/logout">LOG OUT</a></li>
@@ -37,7 +37,7 @@
             <div>
                 <ul class="errors">
                     <?php foreach ($errors as $error) :?>
-                        <li class="errors"><?= $error ?></li>
+                        <li class="errors centermaster"><?= $error ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -47,12 +47,10 @@
     <div class="music-player">
 
         <i class="fas fa-times" id="close"></i>
+        <embed controls class="music"></audio>
 
     </div>
-
-    <div id="container">
-
-    </div>
+    
 
 
     <footer>

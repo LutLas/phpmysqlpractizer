@@ -39,13 +39,13 @@ class Joke {
 
         $user = $this->authentication->getUser();
 
-        $link = '<a class="navmaster2" href="/joke/edit">Add Joke</a>';
+        $link = '<a class="navmaster2" href="/joke/edit">Add Song</a>';
 
-        $alertText = $link.' '.$totalJokes. ' jokes have been submitted to the Internet Joke Database.';
+        $alertText = $link.' '.$totalJokes. ' songs have been submitted to the MasteredSite Music Database.';
 
         return ['template' => 'jokes.html.php', 
-                'title' => 'Joke List',
-                'heading' => 'List of Jokes',
+                'title' => 'Music List',
+                'heading' => 'List of Songs',
                 'alertText' => $alertText,
                 'alertStyle' => 'noticep',
                 'variables' => [
@@ -61,11 +61,19 @@ class Joke {
 
     public function home() {
 
-        $title = 'Internet Joke Database';
-           
-        $heading = 'The Ultimate Joke Database';
+        $author = $this->authentication->getUser();
 
-        return ['template' => 'home.html.php', 'title' => $title, 'heading' => $heading];
+        $title = 'MasteredSite Music Database';
+           
+        $heading = 'The Ultimate Music Database';
+
+        return [
+            'template' => 'home.html.php', 
+            'title' => $title, 'heading' => $heading,
+            'variables' => [
+                'user' => $author ?? null
+            ]
+        ];
     }
 
     public function deleteSubmit() {

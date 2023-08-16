@@ -1,4 +1,5 @@
-<form style="align-items: center; justify-content: center; display: flex;" action="" method="post">
+<section class="form-container">
+<form class="centermaster" action="" method="post">
 <table >
         <thead>
         </thead>
@@ -79,3 +80,4 @@
         </tfoot>
     </table>
 </form>
+</section>

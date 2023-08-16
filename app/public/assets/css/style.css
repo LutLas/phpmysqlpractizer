@@ -19,8 +19,16 @@
    --light-bg:#f5f5f5;
    --black:#2c3e50;
    --white:#fff;
+   --lightest-green:#cfffcf;
+   --greenish:#09e505;
+   --redish:#ff0000;
+   --yellowish:#ceae1f;
+   --blueish:#301fce;
+   --blueblackish:#080034;
+   --purpleish:#532f76;
    --box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
    --border:.2rem solid var(--black);
+   --border2:.1rem solid var(--black);
 }
 
 *{
@@ -281,7 +289,6 @@ section{
 }
 
 .music-player .box .artist{
-   margin:.5rem 0;
    font-size: 1.8rem;
    color:var(--main-color);
 }
@@ -289,7 +296,6 @@ section{
 .music-player .box .music{
    border-top: var(--border);
    width: 100%;
-   margin-top: 1rem;
 }
 
 .music-player .box .music::-webkit-media-controls-enclosure{
@@ -313,37 +319,63 @@ section{
 .customa {
   background: transparent;
   /* Make it white if you need */
-  color: #ffffff;
+  color: var(--white);
   text-decoration: none;
   margin: 6px;
   padding: 2px;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--white);
+}
+
+.customa:hover{
+   cursor: pointer;
+   color: var(--lightest-green);
 }
 
 .noticep {
-  background: rgb(4, 255, 0);
+   position:sticky; 
+   top:5.6rem;
+
+  background: var(--greenish);
   /* Make it white if you need */
-  color: #080034;
+  color: var(--blueblackish);
   text-align: center;
   font-style: italic;
-  font: 0.8em sans-serif;
+  font: 1.1em sans-serif;
   padding: 2px;
   margin: 0px;
+
+  border-radius: .25rem;
+  border:var(--border2);
+  box-shadow: var(--box-shadow);
+  animation: fadeIn .4s cubic-bezier(.3,1.41,.4,1.46);
 }
 
 .noticef {
-  background: rgb(255, 0, 0);
+   position:sticky; 
+   top:5.6rem;
+
+  background: var(--redish);
   /* Make it white if you need */
-  color: #ffffff;
+  color: var(--white);
   text-align: center;
   font-style: italic;
-  font: 0.8em sans-serif;
+  font: 1.1em sans-serif;
   padding: 1px;
   margin: 0px;
+  
+  border-radius: .25rem;
+  border:var(--border2);
+  box-shadow: var(--box-shadow);
+  animation: fadeIn .4s cubic-bezier(.3,1.41,.4,1.46);
 }
 
 .hidden {
   display: none;
+}
+
+.centermaster{
+   display: grid;
+   place-items: center; 
 }
 
 .navmaster {
@@ -356,39 +388,67 @@ section{
 }
 
 .navmaster2{
-  background-color: white; 
-  color: black; 
+  background-color: var(--white); 
+  color: var(--black); 
   text-decoration: none;
-  font: 0.9em sans-serif;
-  padding: 1.5px;
-  border: 2px solid rgb(3, 198, 0);
+  padding: 2px;
+  border: 2px solid var(--greenish);
+  font: 1.5em sans-serif;
+  border-radius: .5rem;
+  box-shadow: var(--box-shadow);
+}
+
+.navmaster2:hover{
+   cursor: pointer;
+   color: var(--main-color);
 }
 
 .navmasterYellow{
-  background-color: white; 
-  color: black; 
+  background-color: var(--white); 
+  color: var(--black); 
   text-decoration: none;
-  font: 0.9em sans-serif;
   padding: 1.5px;
-  border: 2px solid rgb(206, 174, 31);
+  border: 2px solid var(--yellowish);
+  font: 1.2em sans-serif;
+  border-radius: .5rem;
+  box-shadow: var(--box-shadow);
+}
+
+.navmasterYellow:hover{
+   cursor: pointer;
+   color: var(--main-color);
 }
 
 .navmasterRed{
-  background-color: white; 
-  color: black; 
+   background-color: var(--white); 
+   color: var(--black); 
   text-decoration: none;
-  font: 0.9em sans-serif;
   padding: 1.5px;
-  border: 2px solid rgb(206, 31, 31);
+  border: 2px solid var(--redish);
+  font: 1.2em sans-serif;
+  border-radius: .5rem;
+  box-shadow: var(--box-shadow);
+}
+
+.navmasterRed:hover{
+   cursor: pointer;
+   color: var(--main-color);
 }
 
 .navmasterBlue{
-  background-color: white; 
-  color: black; 
+   background-color: var(--white); 
+   color: var(--black); 
   text-decoration: none;
-  font: 0.9em sans-serif;
   padding: 1.5px;
-  border: 2px solid rgb(48, 31, 206);
+  border: 2px solid var(--blueish);
+  font: 1.2em sans-serif;
+  border-radius: .5rem;
+  box-shadow: var(--box-shadow);
+}
+
+.navmasterBlue:hover{
+   cursor: pointer;
+   color: var(--main-color);
 }
 
 .tablemaster{
@@ -419,43 +479,32 @@ section{
 
 .errors {
   padding: 1px;
-  border: 0.5px solid red;
+  border: 0.5px solid var(--redish);
   background-color: lightyellow;
-  color: red;
+  color: var(--redish);
   margin-bottom: 0.5px;
   overflow: auto;
 }
 
 nav {
-  background: rgb(83, 47, 118);
+   position: sticky;
+   top: 3.3rem;
+  background: var(--purpleish);
+}
+
+header{
+   position:sticky; 
+   top:0px;
+   background: var(--white);
 }
 
 footer {
-  background: rgb(83, 47, 118);
+   position: sticky;
+   bottom: 0rem;
+  background: var(--purpleish);
   /* Make it white if you need */
-  color: white;
-  margin: 0px;
+  color: var(--white);
+  margin-top: 8px;
   padding: 8px;
   text-align: center;
 }
-
-/* 
-.jokelist {display: table;}
-.categories {display: table-cell; width: 20%; background-color: #333; padding: 1em; list-style-type: none;}
-.categories a {color: white; text-decoration: none;}
-.categories li {margin-bottom: 1em;}
-*/
-
-/*
-body {
-    background: transparent; \/\* Make it white if you need \*\/
-    color: #fcbe24;
-    padding: 0 24px;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  */
