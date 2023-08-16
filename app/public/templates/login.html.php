@@ -1,8 +1,9 @@
+
 <form class="centermaster" action="" method="post">
 
                         <label for="email">Email Address</label>
 
-                        <input name="author[email]" id="email" type="email" value="<?=$author['email'] ?? ''?>">
+                        <input name="author[email]" id="email" type="email" value="<?=$author['email'] ?? ''?>" class="box">
 
                         <label for="password">Password</label>
 
