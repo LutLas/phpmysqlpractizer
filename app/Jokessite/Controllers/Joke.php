@@ -94,36 +94,106 @@ class Joke {
     public function editSubmit() {
             // Get the currently logged in user as the $author to associate the joke with
             $author = $this->authentication->getUser();
+            $categories = $this->categoriesTable->findAllGeneric();
+
+            // Assume the data is valid to begin with
+            $errors = [];
+        
+            $joke = $_POST['joke'];
+
+            $heading = 'Song Modification Page';
 
             if (is_null($author)) {
                 # code...
                 header('location: /login/login'); 
             }
 
-            if (!empty($id)) {
-              $joke = $this->jokesTable->findGeneric('id', $id)[0];
+            if (!empty($joke['id'])) {
+              $tempJoke = $this->jokesTable->findGeneric('id', $joke['id'])[0];
         
-              if ($joke->authorId != $author->id) {
-               return;
+              if ($tempJoke->authorid != $author->id) {
+                return header('location: /joke/list');  
               }
+              $heading = 'Editing Song No:'.$joke['id'];
             }
-        
-            $joke = $_POST['joke'];
+
             $joke['jokedate'] = new \DateTime();
-
-            // Save the joke using the new addJoke method
-            $jokeEntity = $author->addJoke($joke);
-
-            $jokeEntity->clearCategories();
-
-            if (isset($_POST['category'])) {
-                # code...
-                foreach ($_POST['category'] as $categoryId) {
-                    $jokeEntity->addCategory($categoryId);
+            
+            if($dateTimePublishedStamp = !strtotime($joke['datetimepublished'])){
+                $dateTimePublished = new \DateTime();
+                $dateTimePublished->setTimestamp($dateTimePublishedStamp);
+                
+                if (!$dateTimePublished instanceof \DateTime || empty($joke['datetimepublished'])) {
+                    
+                    $errors[] = "Invalid Date/Time Published:";
                 }
             }
+
+            if (empty($joke['joketext'])) {
+                    
+                $errors[] = "Song Description Missing:";
+                
+            } 
+
+            if (empty($joke['joketitle'])) {
+                    
+                $errors[] = "Song Title Missing:";
+                
+            } 
+            
+            if(empty($joke['artistname'])){
+                    
+                $errors[] = "Artist Name Missing:";
+                
+            } 
+            
+            if (empty($joke['albumcover'])){
+                    
+                $errors[] = "Album Cover Missing:";
+                
+            } 
+            
+            if (empty($joke['albumname'])){
+                    
+                $errors[] = "Album Name Missing:";
+                
+            } 
+            
+            if (empty($joke['song'])) {
+                    
+                $errors[] = "File Upload Missing:";
+                
+            }
+
+            if (!empty($errors)) {
+                return [
+                    'template' => 'editjoke.html.php', 
+                    'title' => 'Edit Song',
+                    'heading' => $heading,
+                    'errors' => $errors,
+                    'variables' => [
+                        'joke' => $joke,
+                        'user' => $author,
+                        'categories' => $categories
+                    ]
+                ];
+            }else{
+                // Save the joke using the new addJoke method
+                var_dump($joke);
+                exit();
+                $jokeEntity = $author->addJoke($joke);
     
-            header('location: /joke/list');  
+                $jokeEntity->clearCategories();
+    
+                if (isset($_POST['category'])) {
+                    # code...
+                    foreach ($_POST['category'] as $categoryId) {
+                        $jokeEntity->addCategory($categoryId);
+                    }
+                }
+        
+                header('location: /joke/list');  
+            }
     }
 
     function edit($id = null) {
@@ -131,21 +201,21 @@ class Joke {
         $categories = $this->categoriesTable->findAllGeneric();
         $jokes = $this->jokesTable->findAllGeneric();
         
-        $joke = null;
-        $heading = 'Joke Modification Page';
-
+        //$joke = null;
+        $heading = 'Song Modification Page';
         
             foreach ($jokes as $jokeEntity) {
                 # code...
                 if (!empty($id) && $jokeEntity->id == $id){
                     $joke = $this->jokesTable->findGeneric('id', $id)[0];
                      
-                    $heading = 'Editing Joke No:'.$id;
+                    $heading = 'Editing Song No:'.$id;
+                    
                 }
             }
         
             return ['template' => 'editjoke.html.php', 
-                    'title' => 'Edit Joke',
+                    'title' => 'Edit Song',
                     'heading' => $heading,
                     'variables' => [
                         'joke' => $joke ?? null,

@@ -15,6 +15,7 @@ class Joke {
     public string $albumname;
     public string $song;
     public string $datetimepublished;
+    public bool $approved;
 
     private ?Author $author;
 

@@ -2,8 +2,13 @@
 <section class="form-container">
 <form class="centermaster" action="" method="post">
   <input type="hidden" name="joke[id]" value="<?= $joke->id ?? ''?>">
-                <label for="joketext">Edit Your Joke Here:</label>
-                <textarea style="background-color: #a0be9d;" id="joketext" name="joke[joketext]" rows="3" cols="30"><?= $joke->joketext ?? ''?></textarea>
+
+                <label for="datetimepublished">Date/Time Published:</label>
+                <input type="datetime-local" id="datetimepublished" name="joke[datetimepublished]" value="<?= $joke->datetimepublished ?? $joke['datetimepublished'] ?? '' ?>" REQUIRED>
+               
+                <label for="joketext">Song Description:</label>
+                <textarea style="background-color: #a0be9d;" id="joketext" name="joke[joketext]" rows="3" cols="30" REQUIRED><?= $joke->joketext ?? $joke['joketext'] ?? '' ?></textarea>
+                
                 <?php if (!empty($categories)): ?> 
                     <p>Select Genre</p>
                     <?php foreach ($categories as $category): ?>

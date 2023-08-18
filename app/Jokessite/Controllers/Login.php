@@ -38,11 +38,19 @@ class Login {
             $success = $this->authentication->login($author['email'], $author['password']);
 
             if ($success) {
+
+                $miniheading = 'Logged In Successfully';
+                $messegecontent = 'Welcome back to the MasteredSite Music Database';
+
                 return ['template' => 'loginsuccess.html.php',
                         'title' => 'Log In Successful',
                         'heading' => 'Account Login Success',
                         'alertText' => 'Welcome back! You are logged in as '.$author['email'],
-                        'alertStyle' => 'noticep'
+                        'alertStyle' => 'noticep',
+                        'variables' => [
+                          'miniheading' => $miniheading,
+                          'messegecontent' => $messegecontent
+                        ]
                     ];
             }
             else {
@@ -76,6 +84,19 @@ class Login {
 
     public function logout() {
         $this->authentication->logout();
-        header('location: /');
+
+        $miniheading = 'Logged Out Successfully';
+        $messegecontent = 'Thank you for visiting the MasteredSite Music Database';
+
+        return ['template' => 'loginsuccess.html.php',
+                'title' => 'Log Out Successful',
+                'heading' => 'Account Logout Success',
+                'alertText' => 'Good Bye! Please come back soon!',
+                'alertStyle' => 'noticep',
+                'variables' => [
+                  'miniheading' => $miniheading,
+                  'messegecontent' => $messegecontent
+                ]
+            ];
     }
 }

@@ -7,13 +7,15 @@ class Author {
   const DELETE_JOKE = 2;
   const LIST_CATEGORIES = 4;
   const EDIT_CATEGORY = 8;
-  const DELETE_CATEGORY = 16;
-  const EDIT_USER_ACCESS = 32;
+  const APPROVE_CATEGORY = 16;
+  const DELETE_CATEGORY = 32;
+  const EDIT_USER_ACCESS = 64;
   public int $id;
   public string $name;
   public string $email;
   public string $password;
   public int $permissions;
+  public bool $verified;
 
   public function __construct(private DatabaseTable $jokesTable) {
 
