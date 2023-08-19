@@ -32,7 +32,11 @@
     </nav>
 
     <main class="playlist">
-        <p class=<?=$alertStyle?>> <?=$alertText?></p>
+      <div class=<?=$alertStyle?>>
+         <span><?=$alertText?></span>
+         <i class="navmasterRed fas fa-times" onclick="this.parentElement.remove();"></i>
+      </div>
+
         <?php if (!empty($errors)) : ?>
             <div>
                 <ul class="errors">

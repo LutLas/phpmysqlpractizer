@@ -118,6 +118,24 @@ class Joke {
             }
 
             $joke['jokedate'] = new \DateTime();
+
+            if (empty(trim($joke['joketitle']))){
+                    
+                $errors[] = "Song Title Missing";
+                
+            } 
+            
+            if(empty(trim($joke['artistname']))){
+                    
+                $errors[] = "Artist Name Missing";
+                
+            } 
+            
+            if (empty(trim($joke['albumname']))){
+                    
+                $errors[] = "Album Name Missing";
+                
+            } 
             
             if($dateTimePublishedStamp = !strtotime($joke['datetimepublished'])){
                 $dateTimePublished = new \DateTime();
@@ -129,41 +147,84 @@ class Joke {
                 }
             }
 
-            if (empty($joke['joketext'])) {
+            if (empty(trim($joke['joketext']))) {
                     
-                $errors[] = "Song Description Missing:";
+                $errors[] = "Song Description Missing";
                 
             } 
 
-            if (empty($joke['joketitle'])) {
-                    
-                $errors[] = "Song Title Missing:";
-                
-            } 
+            if (empty($errors)) {
             
-            if(empty($joke['artistname'])){
-                    
-                $errors[] = "Artist Name Missing:";
+                $fileUploadArray = $_FILES['joke'];
                 
-            } 
-            
-            if (empty($joke['albumcover'])){
-                    
-                $errors[] = "Album Cover Missing:";
+                //Use something similar before processing files.
+                $fileUploadNames = array_filter($fileUploadArray['name']);
+
+                // Count the number of uploaded files in array
+                $fileUploadNamesCount = count($fileUploadNames);
+
+                // File 
+                $allowedImageExtensions = array("png", "jpg", "jpeg");
+                $allowedAudioExtensions = array("mp3", "wav", "m4a","3gp","webm","ogg","oga","mogg");
+
+                // Loop through every file
+                for( $i=0 ; $i < $fileUploadNamesCount ; $i++ ) {
+
+                        //The temp file path is obtained
+                        $tmpFileUploadPath = $fileUploadArray['tmp_name'][$i];
+                        $fileUploadedPath = $fileUploadArray['name'][$i];
+                        $fileUploadedPathExtensionExtract = explode(".", $fileUploadedPath);
+                        
+                        $fileUploadedPathExtension = end($fileUploadedPathExtensionExtract);
+                                    
+                        //Setup our new file path
+                        $uploadsDir = "./assets/music/uploads/";
+                        $newFolderDir = $uploadsDir. $joke['artistname'] ."/". $joke['albumname'] ."/";
+                        $newFolderDirAlreadyExists = true;
+
+                        if (!file_exists($newFolderDir)){
+                            $newFolderDirAlreadyExists = mkdir($newFolderDir, 0777, true);
+                        }
+
+                        $newFileUploadPath = $newFolderDir . $fileUploadedPath;
+
+                        if(in_array($fileUploadedPathExtension, $allowedImageExtensions)){
+                            $joke['albumcover'] = $newFileUploadPath;
+                        }elseif(in_array($fileUploadedPathExtension, $allowedAudioExtensions)){
+                            $joke['song'] = $newFileUploadPath;
+                        }else{
+                            $errors[] = "Music/Image File Not Supported";
+                            $tmpFileUploadPath = null;
+                            $i =+ $fileUploadNamesCount;
+                        }
+                        
+                        //A file path needs to be present
+                       if (!empty($tmpFileUploadPath)) {
+
+                                if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 43000000) { 
                 
-            } 
-            
-            if (empty($joke['albumname'])){
-                    
-                $errors[] = "Album Name Missing:";
-                
-            } 
-            
-            if (empty($joke['song'])) {
-                    
-                $errors[] = "File Upload Missing:";
-                
+                                        //File is uploaded to temp dir
+                                        if($newFolderDirAlreadyExists) {
+                                            //File is uploaded to temp dir
+                                            if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
+                                                $errors[] = "Failed To Upload Music/Image File";
+                                                $i =+ $fileUploadNamesCount;
+                                            }
+                                            
+                                        }else{
+                                            $errors[] = "Failed to create Folder for Music";
+                                            $i =+ $fileUploadNamesCount;
+                                        }
+                                    
+                                }else{
+                                    $errors[] = "Invalid Music/Image File Size";
+                                    $i =+ $fileUploadNamesCount;
+                                }
+
+                        }
+                }
             }
+                
 
             if (!empty($errors)) {
                 return [
