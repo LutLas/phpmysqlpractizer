@@ -11,11 +11,15 @@ class Joke {
 
     public string $joketitle;
     public string $artistname;
+    public string $producername;
     public string $albumcover;
     public string $albumname;
     public string $song;
     public string $datetimepublished;
     public bool $approved;
+    public bool $archived;
+    public string $tracknumber;
+    public string $datetimeapproved;
 
     private ?Author $author;
 

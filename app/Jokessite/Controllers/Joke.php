@@ -100,6 +100,7 @@ class Joke {
             $errors = [];
         
             $joke = $_POST['joke'];
+            $tempJoke = null;
 
             $heading = 'Song Modification Page';
 
@@ -118,6 +119,13 @@ class Joke {
             }
 
             $joke['jokedate'] = new \DateTime();
+            $tempDateTimePublished = $joke['datetimepublished'];
+            //$timezone = new \DateTimeZone('CAT');
+            //$joke['jokedate']->setTimezone($timezone);
+            $joke['approved'] = 0;
+            $joke['albumcover'] = ''; 
+            $joke['song'] = '';
+
 
             if (empty(trim($joke['joketitle']))){
                     
@@ -137,13 +145,20 @@ class Joke {
                 
             } 
             
-            if($dateTimePublishedStamp = !strtotime($joke['datetimepublished'])){
+            if($dateTimePublishedStamp = strtotime($joke['datetimepublished'])){
                 $dateTimePublished = new \DateTime();
                 $dateTimePublished->setTimestamp($dateTimePublishedStamp);
                 
                 if (!$dateTimePublished instanceof \DateTime || empty($joke['datetimepublished'])) {
                     
                     $errors[] = "Invalid Date/Time Published:";
+
+                }else{
+                    
+                    $joke['datetimepublished'] = $dateTimePublished;
+                    if ($joke['datetimepublished'] > $joke['jokedate']) {
+                        $joke['datetimepublished'] = $joke['jokedate'];
+                    }
                 }
             }
 
@@ -178,7 +193,7 @@ class Joke {
                         $fileUploadedPathExtension = end($fileUploadedPathExtensionExtract);
                                     
                         //Setup our new file path
-                        $uploadsDir = "./assets/music/uploads/";
+                        $uploadsDir = "../public/assets/music/uploads/";
                         $newFolderDir = $uploadsDir. $joke['artistname'] ."/". $joke['albumname'] ."/";
                         $newFolderDirAlreadyExists = true;
 
@@ -189,44 +204,68 @@ class Joke {
                         $newFileUploadPath = $newFolderDir . $fileUploadedPath;
 
                         if(in_array($fileUploadedPathExtension, $allowedImageExtensions)){
-                            $joke['albumcover'] = $newFileUploadPath;
+
+                            if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 17000000) {
+                                $joke['albumcover'] = str_replace("public/", '', $newFileUploadPath);
+                                        
+                            }else{
+                                $errors[] = "Invalid Image File Size, Expected Max: 16MB";
+                                $tmpFileUploadPath = null;
+                                $i =+ $fileUploadNamesCount;
+                            }
+
                         }elseif(in_array($fileUploadedPathExtension, $allowedAudioExtensions)){
-                            $joke['song'] = $newFileUploadPath;
+
+                            if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 43000000) {
+                                $joke['song'] = str_replace("public/", '', $newFileUploadPath);
+                                        
+                            }else{
+                                $errors[] = "Invalid Audio File Size, Expected Max: 42MB";
+                                $tmpFileUploadPath = null;
+                                $i =+ $fileUploadNamesCount;
+                            }
+                            
                         }else{
-                            $errors[] = "Music/Image File Not Supported";
+                            $errors[] = "Music/Image File Extension Not Supported, Expected Type: 'png', 'jpg', 'jpeg','mp3', 'wav', 'm4a','3gp','webm','ogg','oga','mogg'";
                             $tmpFileUploadPath = null;
                             $i =+ $fileUploadNamesCount;
                         }
                         
                         //A file path needs to be present
-                       if (!empty($tmpFileUploadPath)) {
-
-                                if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 43000000) { 
-                
+                       if (!empty($tmpFileUploadPath)) { 
                                         //File is uploaded to temp dir
                                         if($newFolderDirAlreadyExists) {
                                             //File is uploaded to temp dir
                                             if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
-                                                $errors[] = "Failed To Upload Music/Image File";
+                                                $errors[] = "Failed To Upload Audio/Image File";
                                                 $i =+ $fileUploadNamesCount;
                                             }
                                             
                                         }else{
-                                            $errors[] = "Failed to create Folder for Music";
+                                            $errors[] = "Failed to create Folder for Audio/Image File";
                                             $i =+ $fileUploadNamesCount;
                                         }
-                                    
-                                }else{
-                                    $errors[] = "Invalid Music/Image File Size";
-                                    $i =+ $fileUploadNamesCount;
-                                }
-
                         }
                 }
             }
+
+            if (empty(trim($joke['albumcover']))) {
+                    
+                $errors[] = "Image File Upload Failed";
+                
+            } 
+
+            if (empty(trim($joke['song']))) {
+                    
+                $errors[] = "Audio File Upload Failed";
+                
+            } 
                 
 
             if (!empty($errors)) {
+
+                $joke['datetimepublished'] = $tempDateTimePublished;
+
                 return [
                     'template' => 'editjoke.html.php', 
                     'title' => 'Edit Song',
@@ -240,8 +279,8 @@ class Joke {
                 ];
             }else{
                 // Save the joke using the new addJoke method
-                var_dump($joke);
-                exit();
+                //var_dump($joke);
+                //exit();
                 $jokeEntity = $author->addJoke($joke);
     
                 $jokeEntity->clearCategories();

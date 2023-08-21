@@ -139,12 +139,17 @@ class DatabaseTable {
           if (empty($record[$this->primaryKey])) {
             unset($record[$this->primaryKey]);
           }
+          
           $insertId = $this->insertGeneric($record);
 
           $entity->{$this->primaryKey} = $insertId;
       }
       catch (\PDOException $e) {
-        $this->updateGeneric($record);
+        if(str_contains($e->getMessage()," Duplicate entry ")){
+          $this->updateGeneric($record);
+        }else{
+          exit();
+        };
       }
 
       foreach ($record as $key => $value) {

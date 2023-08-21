@@ -1,7 +1,7 @@
 <?php if (empty($joke->id) || $user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::EDIT_JOKE)): ?>
 <section class="form-container">
 <form class="centermaster" action="" method="post" enctype="multipart/form-data">
-  <input type="hidden" name="joke[id]" value="<?= $joke->id ?? ''?>">
+  <input type="hidden" name="joke[id]" value="<?= $joke->id ?? $joke['id'] ?? '' ?>">
 
 <label for="joketitle">Song Title:</label>
 <input style="background-color: #a0be9d;" type="text" id="joketitle" name="joke[joketitle]" value="<?= $joke->joketitle ?? $joke['joketitle'] ?? '' ?>" REQUIRED>
@@ -12,16 +12,16 @@
 <label for="albumname">Album Name:</label>
 <input style="background-color: #a0be9d;" type="text" id="albumname" name="joke[albumname]" value="<?= $joke->albumname ?? $joke['albumname'] ?? '' ?>" REQUIRED>
 
-<label for="datetimepublished">Date/Time Published:</label>
+<label for="datetimepublished">UTC Date/Time Published:</label>
 <input style="background-color: #a0be9d;" type="datetime-local" id="datetimepublished" name="joke[datetimepublished]" value="<?= $joke->datetimepublished ?? $joke['datetimepublished'] ?? '' ?>" REQUIRED>
 
 <label for="joketext">Song Description:</label>
 <textarea style="background-color: #a0be9d;" id="joketext" name="joke[joketext]" rows="3" cols="30" REQUIRED><?= $joke->joketext ?? $joke['joketext'] ?? '' ?></textarea>
 
-<label for="albumcover">Album/Song Cover Art:</label>
+<label for="albumcover">Album/Song Image Upload(<small style="color: blue;">Max Size 16MB</small>):</label>
 <input type="file" id="albumcover" name="joke[]" value="<?= $joke->albumcover ?? $joke['albumcover'] ?? '' ?>" accept="image/*" multiple="multiple" REQUIRED>
 
-<label for="song">Music File Upload:</label>
+<label for="song">Audio File Upload(<small style="color: blue;">Max Size 42MB</small>):</label>
 <input type="file" id="song" name="joke[]" value="<?= $joke->song ?? $joke['song'] ?? '' ?>" accept="audio/*" REQUIRED>
                 
                 <?php if (!empty($categories)): ?> 
