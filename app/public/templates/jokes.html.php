@@ -1,3 +1,14 @@
+
+<div class="noticejoke">
+  <div>
+    <form action="/joke/search" method="post">
+            <input type="text" name="songquery" id="songquery" value="">
+      <button class="navmasterJoke fas fa-search" type="submit" name="submit">
+    </form>
+  </div>
+        <?=$jokesnav?>
+</div>
+
 <div style="margin-top: 10px;">
     <?php foreach ($categories as $category): ?>
       <a class="navmaster2" href="/joke/list/<?=$category->id?>"><?=$category->name?></a>

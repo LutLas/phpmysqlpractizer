@@ -10,7 +10,7 @@ class Category {
     }
 
     public function getJokes(int $limit = 0, int $offset = 0) {
-        $jokeCategories = $this->jokeCategoriesTable->findGeneric('categoryid', $this->id, null, $limit, $offset);
+        $jokeCategories = $this->jokeCategoriesTable->findGeneric('categoryid', $this->id, null, $limit);
 
         $jokes = [];
 
@@ -27,7 +27,10 @@ class Category {
     }
 
     public function getNumJokes() {
-        return $this->jokeCategoriesTable->totalGeneric('categoryid', $this->id);
+        $queryData = [
+            'categoryid' => $this->id
+        ];
+        return $this->jokeCategoriesTable->totalGeneric($queryData);
     }
     
     private function sortJokes($a, $b) {

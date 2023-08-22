@@ -4,17 +4,14 @@ class DatabaseTable {
     public function __construct(private \PDO $pdo, private string $table, private string $primaryKey, private string $className = '\stdClass', private array $constructorArgs = []) {
     }
 
-    public function totalGeneric(string $field = null, string $value = null) {
-      $query = 'SELECT COUNT(*) FROM `' . $this->table . '`';
+    public function totalGeneric($values) {
+      $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ';
 
-      $values = [];
-    
-      if (!empty($field)) {
-        $query .= ' WHERE `' . $field . '` = :value';
-        $values = [
-          'value' => $value
-        ];
+      foreach ($values as $key => $value) {
+        $query .= '`' . $key . '` = :' . $key . ' AND';
       }
+
+      $query = rtrim($query, ' AND');
     
       $stmt = $this->pdo->prepare($query);
 

@@ -9,8 +9,14 @@
 <label for="artistname">Artist Name:</label>
 <input style="background-color: #a0be9d;" type="text" id="artistname" name="joke[artistname]" value="<?= $joke->artistname ?? $joke['artistname'] ?? '' ?>" REQUIRED>
 
+<label for="producername">Producer Name:</label>
+<input style="background-color: #a0be9d;" type="text" id="producername" name="joke[producername]" value="<?= $joke->producername ?? $joke['producername'] ?? '' ?>" REQUIRED>
+
 <label for="albumname">Album Name:</label>
 <input style="background-color: #a0be9d;" type="text" id="albumname" name="joke[albumname]" value="<?= $joke->albumname ?? $joke['albumname'] ?? '' ?>" REQUIRED>
+
+<label for="tracknumber">Track Number:</label>
+<input style="background-color: #a0be9d;" type="number" id="tracknumber" min="1" max="100" name="joke[tracknumber]" value="<?= $joke->tracknumber ?? $joke['tracknumber'] ?? '' ?>" REQUIRED>
 
 <label for="datetimepublished">UTC Date/Time Published:</label>
 <input style="background-color: #a0be9d;" type="datetime-local" id="datetimepublished" name="joke[datetimepublished]" value="<?= $joke->datetimepublished ?? $joke['datetimepublished'] ?? '' ?>" REQUIRED>

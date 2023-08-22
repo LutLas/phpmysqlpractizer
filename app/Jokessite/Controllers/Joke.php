@@ -15,7 +15,12 @@ class Joke {
         $categories = $this->categoriesTable->findAllGeneric();
         $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 10, $offset);
 
-        $totalJokes = $this->jokesTable->totalGeneric();
+        $queryData = [
+            'approved' => 1,
+            'archived' => 0
+        ];
+
+        $totalJokes = $this->jokesTable->totalGeneric($queryData);
 
 
         foreach ($categories as $categoryEntity) {
@@ -39,22 +44,23 @@ class Joke {
 
         $user = $this->authentication->getUser();
 
-        $link = '<a class="navmaster2" href="/joke/edit">Add Song</a>';
+        $link = '<a class="navmasterJoke" href="/joke/edit">Add Song</a>';
 
-        $alertText = $link.' '.$totalJokes. ' songs have been submitted to the MasteredSite Music Database.';
+        $msg = $totalJokes == 1 ? $totalJokes. ' song has' : $totalJokes. ' songs have';
+
+        $jokesnav = $link.' '.$msg.' been submitted to the MasteredSite Music Database.';
 
         return ['template' => 'jokes.html.php', 
                 'title' => 'Music List',
                 'heading' => 'List of Songs',
-                'alertText' => $alertText,
-                'alertStyle' => 'noticep',
                 'variables' => [
                     'totalJokes' => $totalJokes,
                     'jokes' => $jokes,
                     'user' => $user, //previously $user->id ?? null,
                     'categories' => $categories,
                     'currentPage' => $page,
-                    'categoryId' => $categoryId
+                    'categoryId' => $categoryId,
+                    'jokesnav' => $jokesnav
                 ]
             ];
     }
@@ -81,12 +87,40 @@ class Joke {
         $author = $this->authentication->getUser();
       
         $joke = $this->jokesTable->findGeneric('id', $_POST['jokeid'])[0];
+
+        $jokeArray = json_decode(json_encode($joke), true);
       
-        if ($joke->authorid != $author->id && !$author->hasPermission(AuthorEntity::DELETE_JOKE)) {
+        if ($jokeArray['authorid'] != $author->id && !$author->hasPermission(AuthorEntity::DELETE_JOKE)) {
           return;
         }
 
-        $this->jokesTable->deleteGeneric('id', $_POST['jokeid']);
+        if ($jokeArray['id'] == $_POST['jokeid']) {
+            $jokeArray['archived'] = 1;
+
+            $dateTimePublishedStamp = strtotime($jokeArray['datetimepublished']);
+            $jokeArray['datetimepublished'] = new \DateTime();
+            $jokeArray['datetimepublished']->setTimestamp($dateTimePublishedStamp);
+
+            $dateTimeJokeDate = strtotime($jokeArray['jokedate']);
+            $jokeArray['jokedate'] = new \DateTime();
+            $jokeArray['jokedate']->setTimestamp($dateTimeJokeDate);
+
+            if (!is_null($jokeArray['datetimeapproved'])) {
+                
+                $dateTimeApproved = strtotime($jokeArray['datetimeapproved']);
+                $jokeArray['datetimeapproved'] = new \DateTime();
+                $jokeArray['datetimeapproved']->setTimestamp($dateTimeApproved);
+            }
+
+            if (!is_null($jokeArray['datetimearchived'])) {
+
+                $dateTimeArchived = strtotime($jokeArray['datetimearchived']);
+                $jokeArray['datetimearchived'] = new \DateTime();
+                $jokeArray['datetimearchived']->setTimestamp($dateTimeArchived);
+            }
+
+            $author->addJoke($jokeArray);
+        }
 
         header('location: /joke/list');
     }

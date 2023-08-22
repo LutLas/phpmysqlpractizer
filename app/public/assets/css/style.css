@@ -29,6 +29,7 @@
    --box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
    --border:.2rem solid var(--black);
    --border2:.1rem solid var(--black);
+   --border3:.2rem solid var(--purpleish);
 }
 
 *{
@@ -328,7 +329,47 @@ section{
 
 .customa:hover{
    cursor: pointer;
-   color: var(--lightest-green);
+   background-color: var(--white);
+   font-size: 1rem;
+   color: var(--purpleish);
+   border: 2px solid var(--blueish);
+}
+
+.noticejoke {
+   position:sticky; 
+   top:5.6rem;
+
+   background: var(--purpleish);
+  /* Make it white if you need */
+  color: var(--white);
+  text-align: center;
+  font-style: italic;
+  font: 1.1em sans-serif;
+  padding: 2px;
+  margin: 0px;
+
+  border-radius: .25rem;
+  border:var(--border3);
+  box-shadow: var(--box-shadow);
+  animation: fadeIn .4s cubic-bezier(.3,1.41,.4,1.46);
+}
+
+.navmasterJoke{
+   background-color: var(--white); 
+   color: var(--black); 
+  text-decoration: none;
+  padding: 1.5px;
+  border: 2px solid var(--blueish);
+  font: 1.2em sans-serif;
+  border-radius: .5rem;
+  box-shadow: var(--box-shadow);
+}
+
+.navmasterJoke:hover{
+   background: var(--purpleish);
+   cursor: pointer;
+   color: var(--white);
+   border: 2px solid var(--white);
 }
 
 .noticep {
@@ -400,7 +441,8 @@ section{
 
 .navmaster2:hover{
    cursor: pointer;
-   color: var(--main-color);
+   background-color: var(--greenish); 
+   color: var(--white);
 }
 
 .navmasterYellow{
@@ -416,7 +458,8 @@ section{
 
 .navmasterYellow:hover{
    cursor: pointer;
-   color: var(--main-color);
+   background-color: var(--yellowish); 
+   color: var(--white);
 }
 
 .navmasterRed{
@@ -432,7 +475,8 @@ section{
 
 .navmasterRed:hover{
    cursor: pointer;
-   color: var(--main-color);
+   background-color: var(--redish); 
+   color: var(--white);
 }
 
 .navmasterBlue{
@@ -448,7 +492,8 @@ section{
 
 .navmasterBlue:hover{
    cursor: pointer;
-   color: var(--main-color);
+   background-color: var(--blueish); 
+   color: var(--white);
 }
 
 .tablemaster{

@@ -18,8 +18,9 @@ class Joke {
     public string $datetimepublished;
     public bool $approved;
     public bool $archived;
-    public string $tracknumber;
-    public string $datetimeapproved;
+    public ?string $tracknumber;
+    public ?string $datetimeapproved;
+    public ?string $datetimearchived;
 
     private ?Author $author;
 
