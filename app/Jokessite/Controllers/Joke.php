@@ -82,6 +82,81 @@ class Joke {
         ];
     }
 
+    public function searchSubmit() {
+        $categoryId = null; 
+        $page = 0;
+
+        $searchValue = $_POST['songquery'];
+
+        if (trim(empty($searchValue))) {
+            return header('location: /joke/list');
+        }
+
+        $searchValueArray = [
+            'joketitle' => '%' . $searchValue . '%',
+            'artistname' => '%' . $searchValue . '%',
+            'albumname' => '%' . $searchValue . '%',
+            'producername' => '%' . $searchValue . '%',
+            'tracknumber' => '%' . $searchValue . '%',
+            'joketext' => '%' . $searchValue . '%'
+        ];
+
+        $queryData = [
+            'approved' => 1,
+            'archived' => 0
+        ];
+
+        $totalJokes = $this->jokesTable->totalGeneric($queryData);
+
+        $offset = ($page-1) * $totalJokes;
+
+        $categories = $this->categoriesTable->findAllGeneric();
+        $jokes = $this->jokesTable->searchGeneric($searchValueArray, $queryData, null, $totalJokes, $offset);
+        $searchedJokesCount = count($jokes);
+
+        foreach ($categories as $categoryEntity) {
+            if (!empty($categoryId) && $categoryEntity->id == $categoryId) {
+                $category = $this->categoriesTable->findGeneric('id', $categoryId)[0];
+                $jokes = $category->getJokes(10,$offset);
+                $totalJokes = $category->getNumJokes();
+            }
+        }
+
+       /* if (is_numeric($categoryId)) {
+            $category = $this->categoriesTable->findGeneric('id', $categoryId)[0] ?? null;
+            $jokes = $category->getJokes(10, $offset);
+            $totalJokes = $category->getNumJokes();
+          }
+          else {
+            $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 10, $offset);
+            $totalJokes = $this->jokesTable->totalGeneric();
+          } */  
+        
+
+        $user = $this->authentication->getUser();
+
+        $link = '<a class="navmasterJoke" href="/joke/edit">Add Song</a>';
+
+        $msg = $totalJokes == 1 ? $totalJokes. ' song' : $totalJokes. ' songs';
+
+        $jokesnav = $link.' '.$searchedJokesCount.' of '.$msg.' with the word "'.$searchValue.'" found.';
+
+        return ['template' => 'jokes.html.php', 
+                'title' => 'Music List',
+                'heading' => 'List of Songs',
+                'variables' => [
+                    'totalJokes' => $totalJokes,
+                    'jokes' => $jokes,
+                    'user' => $user,
+                    'categories' => $categories,
+                    'currentPage' => $page,
+                    'categoryId' => $categoryId,
+                    'jokesnav' => $jokesnav,
+                    'songquery' => $searchValue
+                ]
+            ];
+    }
+
     public function deleteSubmit() {
 
         $author = $this->authentication->getUser();

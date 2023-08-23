@@ -8,14 +8,15 @@ class DatabaseTable {
       $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ';
 
       foreach ($values as $key => $value) {
-        $query .= '`' . $key . '` = :' . $key . ' AND';
+        $query .= '`' . $key . '` = :' . $key . ' AND ';
       }
 
-      $query = rtrim($query, ' AND');
+      $query = rtrim($query, ' AND ');
     
       $stmt = $this->pdo->prepare($query);
 
-      $stmt->execute($values);
+      $stmt->execute($values); 
+
       $row = $stmt->fetch();
 
       return $row[0];
@@ -38,6 +39,62 @@ class DatabaseTable {
   
       $stmt = $this->pdo->prepare($query);
       $stmt->execute($values);
+
+      return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constructorArgs);
+    }
+
+    public function searchGeneric($values, $others, string $orderBy = null, int $limit = 0, int $offset = 0) {
+      $query = 'SELECT * FROM `' . $this->table . '` WHERE ';
+
+      $mergedValues = [];
+
+      if (!empty($values)) {
+        
+        $query .= '(';
+        
+        foreach ($values as $key => $value) {
+          $query .= '`' . $key . '` LIKE :' . $key . ' OR ';
+        }
+
+        $query = rtrim($query, ' OR ');
+        $query .= ')';
+        
+        $mergedValues = array_merge($mergedValues, $values);
+      }
+
+      if (!empty($others)) {
+        if (!empty($values)) {
+          $query .= ' AND (';
+        }
+
+        foreach ($others as $key => $value) {
+          $query .= '`' . $key . '` = :' . $key . ' AND ';
+        }
+
+        $query = rtrim($query, ' AND ');
+
+        if (!empty($values)) {
+          $query .= ') ';
+        }
+        
+        $mergedValues = array_merge($mergedValues, $others);
+      }
+
+      if ($orderBy != null) {
+        $query .= ' ORDER BY ' . $orderBy;
+      }
+
+      if ($limit > 0) {
+          $query .= ' LIMIT ' . $limit;
+      }
+
+      if ($offset > 0) {
+        $query .= ' OFFSET ' . $offset;
+      }
+  
+      $stmt = $this->pdo->prepare($query);
+
+      $stmt->execute($mergedValues);
 
       return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->className, $this->constructorArgs);
     }

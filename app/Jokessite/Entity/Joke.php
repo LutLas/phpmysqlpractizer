@@ -21,6 +21,7 @@ class Joke {
     public ?string $tracknumber;
     public ?string $datetimeapproved;
     public ?string $datetimearchived;
+    public ?int $approvedby;
 
     private ?Author $author;
 

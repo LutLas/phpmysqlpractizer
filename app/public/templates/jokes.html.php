@@ -2,7 +2,7 @@
 <div class="noticejoke">
   <div>
     <form action="/joke/search" method="post">
-            <input type="text" name="songquery" id="songquery" value="">
+            <input type="text" name="songquery" id="songquery" value="<?=$songquery ?? '' ?>" REQUIRED>
       <button class="navmasterJoke fas fa-search" type="submit" name="submit">
     </form>
   </div>
@@ -22,7 +22,8 @@
       <div class="box">
         
         <div class="title"><?= htmlspecialchars($joke->joketitle, ENT_QUOTES,
-              'UTF-8'); ?></div>
+              'UTF-8'); ?>(prod.<?= htmlspecialchars($joke->producername, ENT_QUOTES,
+              'UTF-8'); ?>)</div>
 
           <?php if (!empty($joke->albumcover)): ?>
           <img src="<?= $joke->albumcover; ?>" alt="" class="album">
