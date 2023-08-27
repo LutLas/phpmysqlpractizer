@@ -48,12 +48,12 @@
               echo $date->format('jS F Y H:i:s');
               ?> UTC)
           <?php if ($user): ?>
-                <?php if (empty($joke) || $user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::EDIT_JOKE)): ?>
+                <?php if (($user->id == $joke->authorid && $user->hasPermission(\Jokessite\Entity\Author::EDIT_JOKE)) || $user->hasPermission(\Jokessite\Entity\Author::APPROVE_JOKE)): ?>
                       <div style="margin-top: 10px;">
                           <a class="navmasterYellow" href="/joke/edit/<?= $joke->id?>">Edit</a>
                       </div>
                 <?php endif; ?>
-                <?php if ($user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::DELETE_JOKE)): ?>
+                <?php if ($user->hasPermission(\Jokessite\Entity\Author::DELETE_JOKE)): ?>
                   <div style="margin-top: 8px;padding-bottom: 8px;">
                       <form action="/joke/delete" method="post">
                         <input hidden type="text" name="jokeid" id="jokeid" value="<?= $joke->id ?>">

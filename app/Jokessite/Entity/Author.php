@@ -4,12 +4,13 @@ use Generic\DatabaseTable;
 
 class Author {
   const EDIT_JOKE = 1;
-  const DELETE_JOKE = 2;
-  const LIST_CATEGORIES = 4;
-  const EDIT_CATEGORY = 8;
-  const APPROVE_CATEGORY = 16;
+  const LIST_CATEGORIES = 2;
+  const EDIT_CATEGORY = 4;
+  const APPROVE_CATEGORY = 8;
+  const APPROVE_JOKE = 16;
   const DELETE_CATEGORY = 32;
-  const EDIT_USER_ACCESS = 64;
+  const DELETE_JOKE = 64;
+  const EDIT_USER_ACCESS = 128;
   public int $id;
   public string $name;
   public string $email;
@@ -33,6 +34,6 @@ class Author {
   }
 
   public function hasPermission(int $permission) {
-    return $this->permissions & $permission;
+    return $this->permissions >= $permission;
   }
 }

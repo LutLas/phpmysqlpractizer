@@ -221,17 +221,26 @@ class Joke {
             if (!empty($joke['id'])) {
               $tempJoke = $this->jokesTable->findGeneric('id', $joke['id'])[0];
         
-              if ($tempJoke->authorid != $author->id) {
+              if ($tempJoke->authorid != $author->id && $author->permissions < AuthorEntity::APPROVE_JOKE) {
                 return header('location: /joke/list');  
               }
               $heading = 'Editing Song No:'.$joke['id'];
             }
+            
+            $joke['approved'] = 0;
 
-            $joke['jokedate'] = new \DateTime();
+            if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $_POST['approved'] && !is_null($tempJoke)) {
+                $joke['jokedate'] = $tempJoke->jokedate;
+                $joke['approved'] = $_POST['approved'];
+                $joke['datetimeapproved'] = new \DateTime();
+                $joke['approvedby'] = $author->id;
+            }else{
+                $joke['jokedate'] = new \DateTime();
+            }
             $tempDateTimePublished = $joke['datetimepublished'];
             //$timezone = new \DateTimeZone('CAT');
             //$joke['jokedate']->setTimezone($timezone);
-            $joke['approved'] = 0;
+
             $joke['albumcover'] = ''; 
             $joke['song'] = '';
 
@@ -289,7 +298,7 @@ class Joke {
 
                 // File 
                 $allowedImageExtensions = array("png", "jpg", "jpeg");
-                $allowedAudioExtensions = array("mp3", "wav", "m4a","3gp","webm","ogg","oga","mogg");
+                $allowedAudioExtensions = array("mp3", "wav", "m4a","3gp","webm","ogg","oga","mogg","swf");
 
                 // Loop through every file
                 for( $i=0 ; $i < $fileUploadNamesCount ; $i++ ) {
@@ -303,14 +312,19 @@ class Joke {
                                     
                         //Setup our new file path
                         $uploadsDir = "../public/assets/music/uploads/";
+                        $uploadsDirUnapproved = "../public/assets/music/uploads/Unapproved/";
                         $newFolderDir = $uploadsDir. $joke['artistname'] ."/". $joke['albumname'] ."/";
+                        $newFolderDirUnapproved = $uploadsDirUnapproved. $joke['artistname'] ."/". $joke['albumname'] ."/";
                         $newFolderDirAlreadyExists = true;
+                        $newFolderDirUnapprovedAlreadyExists = true;
 
-                        if (!file_exists($newFolderDir)){
+                        if (!file_exists($newFolderDir) || !file_exists($newFolderDirUnapproved)){
                             $newFolderDirAlreadyExists = mkdir($newFolderDir, 0777, true);
+                            $newFolderDirUnapprovedAlreadyExists = mkdir($newFolderDirUnapproved, 0777, true);
                         }
 
                         $newFileUploadPath = $newFolderDir . $fileUploadedPath;
+                        $newFileUploadPathUnaproved = $newFolderDirUnapproved . $fileUploadedPath;
 
                         if(in_array($fileUploadedPathExtension, $allowedImageExtensions)){
 
@@ -326,7 +340,12 @@ class Joke {
                         }elseif(in_array($fileUploadedPathExtension, $allowedAudioExtensions)){
 
                             if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 43000000) {
-                                $joke['song'] = str_replace("public/", '', $newFileUploadPath);
+                                $joke['song'] = str_replace("public/", '', $newFileUploadPathUnaproved);
+
+                                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $_POST['approved'] && trim(strtolower($fileUploadedPathExtension)) == 'swf') {
+                                    # code...
+                                    $joke['song'] = str_replace("public/", '', $newFileUploadPath);
+                                }
                                         
                             }else{
                                 $errors[] = "Invalid Audio File Size, Expected Max: 42MB";
@@ -343,11 +362,19 @@ class Joke {
                         //A file path needs to be present
                        if (!empty($tmpFileUploadPath)) { 
                                         //File is uploaded to temp dir
-                                        if($newFolderDirAlreadyExists) {
+                                        if($newFolderDirAlreadyExists && $newFolderDirUnapprovedAlreadyExists) {
                                             //File is uploaded to temp dir
-                                            if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
-                                                $errors[] = "Failed To Upload Audio/Image File";
-                                                $i =+ $fileUploadNamesCount;
+                                            if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $_POST['approved']) {
+                                                # code...
+                                                if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
+                                                    $errors[] = "Failed To Upload Audio/Image File";
+                                                    $i =+ $fileUploadNamesCount;
+                                                }
+                                            }else{
+                                                if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPathUnaproved)) {
+                                                    $errors[] = "Failed To Upload Audio/Image File";
+                                                    $i =+ $fileUploadNamesCount;
+                                                }
                                             }
                                             
                                         }else{
@@ -412,10 +439,16 @@ class Joke {
         
         //$joke = null;
         $heading = 'Song Modification Page';
-        
+
             foreach ($jokes as $jokeEntity) {
                 # code...
                 if (!empty($id) && $jokeEntity->id == $id){
+                    
+                    if ($author->permissions < AuthorEntity::APPROVE_JOKE && $jokeEntity->authorid != $author->id) {
+                        # code...
+                        header('location: /joke/list');  
+                    }
+                
                     $joke = $this->jokesTable->findGeneric('id', $id)[0];
                      
                     $heading = 'Editing Song No:'.$id;
