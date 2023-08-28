@@ -2,6 +2,7 @@
 <div class="noticejoke">
   <div>
     <form action="/joke/search" method="post">
+            <input type="hidden" name="pagequery" id="pagequery" value="musiclist" REQUIRED>
             <input type="text" name="songquery" id="songquery" value="<?=$songquery ?? '' ?>" REQUIRED>
       <button class="navmasterJoke fas fa-search" type="submit" name="submit">
     </form>

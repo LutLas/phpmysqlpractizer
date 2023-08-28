@@ -51,7 +51,7 @@
     <div class="music-player">
 
         <i class="fas fa-times" id="close"></i>
-        <embed controls class="music"></audio>
+        <embed controls class="music"></embed>
 
     </div>
     

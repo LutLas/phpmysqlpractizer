@@ -12,8 +12,10 @@ class Joke {
     public function list(mixed $categoryId = null, int $page = 0) {
         $offset = ($page-1)*10;
 
+        $user = $this->authentication->getUser();
         $categories = $this->categoriesTable->findAllGeneric();
         $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 10, $offset);
+        $approvedJokes = [];
 
         $queryData = [
             'approved' => 1,
@@ -21,6 +23,19 @@ class Joke {
         ];
 
         $totalJokes = $this->jokesTable->totalGeneric($queryData);
+
+        foreach ($jokes as $key => $value) {
+            # code...
+            $tempJoke = $value;
+            $tempJokeTempAlbumCover = str_replace("../", '../public/', $tempJoke->albumcover);
+
+            if (!file_exists($tempJokeTempAlbumCover)) {
+                # code...
+                $tempJoke->albumcover = '';
+            }
+            
+            $approvedJokes[] = $tempJoke;
+        }
 
 
         foreach ($categories as $categoryEntity) {
@@ -40,9 +55,6 @@ class Joke {
             $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 10, $offset);
             $totalJokes = $this->jokesTable->totalGeneric();
           } */  
-        
-
-        $user = $this->authentication->getUser();
 
         $link = '<a class="navmasterJoke" href="/joke/edit">Add Song</a>';
 
@@ -55,7 +67,7 @@ class Joke {
                 'heading' => 'List of Songs',
                 'variables' => [
                     'totalJokes' => $totalJokes,
-                    'jokes' => $jokes,
+                    'jokes' => $approvedJokes,
                     'user' => $user, //previously $user->id ?? null,
                     'categories' => $categories,
                     'currentPage' => $page,
@@ -69,15 +81,58 @@ class Joke {
 
         $author = $this->authentication->getUser();
 
+        $categories = $this->categoriesTable->findAllGeneric();
+
         $title = 'MasteredSite Music Database';
+
+        $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 0, 0);
+        $unapprovedJokes = [];
+        $unapprovedJokesForAdmin = [];
+
+        if (!is_null($author)) {
+            # code...
+            $tempJoke = null;
+
+            foreach ($jokes as $key => $value) {
+                # code...
+                $tempJoke = $value;
+                $tempJokeTempAlbumCover = str_replace("../", '../public/', $tempJoke->albumcover);
+
+                if (!file_exists($tempJokeTempAlbumCover)) {
+                    # code...
+                    $tempJoke->albumcover = '';
+                }
+
+                if ($value->authorid == $author->id && !$tempJoke->approved) {
+                    $unapprovedJokes[] = $tempJoke;
+                }
+
+                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && !$tempJoke->approved) {
+                    unset($unapprovedJokes);
+                    $unapprovedJokesForAdmin[] = $tempJoke;
+                    $unapprovedJokes = $unapprovedJokesForAdmin;
+                }
+            }
+        }
            
         $heading = 'The Ultimate Music Database';
+
+        $totalJokes = count($unapprovedJokes);
+
+        $link = '<a class="navmasterJoke" href="/joke/edit">Add Song</a>';
+
+        $msg = $totalJokes == 1 ? $totalJokes. ' song ' : $totalJokes. ' songs';
+
+        $jokesnav = $link.' You have '.$msg.' pending Approval.';
 
         return [
             'template' => 'home.html.php', 
             'title' => $title, 'heading' => $heading,
             'variables' => [
-                'user' => $author ?? null
+                'user' => $author ?? null,
+                'jokes' => $unapprovedJokes,
+                'categories' => $categories,
+                'jokesnav' => $jokesnav
             ]
         ];
     }
@@ -85,11 +140,16 @@ class Joke {
     public function searchSubmit() {
         $categoryId = null; 
         $page = 0;
+    
+        $categories = $this->categoriesTable->findAllGeneric();
+
+        $user = $this->authentication->getUser();
 
         $searchValue = $_POST['songquery'];
+        $pageName = $_POST['pagequery'];
 
-        if (trim(empty($searchValue))) {
-            return header('location: /joke/list');
+        if (trim(empty($searchValue))||trim(empty($pageName))) {
+            return;
         }
 
         $searchValueArray = [
@@ -101,25 +161,19 @@ class Joke {
             'joketext' => '%' . $searchValue . '%'
         ];
 
-        $queryData = [
-            'approved' => 1,
-            'archived' => 0
-        ];
+        if ($pageName == 'musiclist') {
 
-        $totalJokes = $this->jokesTable->totalGeneric($queryData);
+            $queryData = [
+                'approved' => 1,
+                'archived' => 0
+            ];
 
-        $offset = ($page-1) * $totalJokes;
-
-        $categories = $this->categoriesTable->findAllGeneric();
-        $jokes = $this->jokesTable->searchGeneric($searchValueArray, $queryData, null, $totalJokes, $offset);
-        $searchedJokesCount = count($jokes);
-
-        foreach ($categories as $categoryEntity) {
-            if (!empty($categoryId) && $categoryEntity->id == $categoryId) {
-                $category = $this->categoriesTable->findGeneric('id', $categoryId)[0];
-                $jokes = $category->getJokes(10,$offset);
-                $totalJokes = $category->getNumJokes();
-            }
+        }elseif ($pageName == 'home') {
+            
+            $queryData = [
+                'approved' => 0,
+                'archived' => 0
+            ];
         }
 
        /* if (is_numeric($categoryId)) {
@@ -131,30 +185,137 @@ class Joke {
             $jokes = $this->jokesTable->findAllGeneric('jokedate DESC', 10, $offset);
             $totalJokes = $this->jokesTable->totalGeneric();
           } */  
-        
 
-        $user = $this->authentication->getUser();
+          if ($pageName == 'musiclist') {
 
-        $link = '<a class="navmasterJoke" href="/joke/edit">Add Song</a>';
+            $totalJokes = $this->jokesTable->totalGeneric($queryData);
+    
+            $offset = ($page-1) * $totalJokes;
 
-        $msg = $totalJokes == 1 ? $totalJokes. ' song' : $totalJokes. ' songs';
+            $jokes = $this->jokesTable->searchGeneric($searchValueArray, $queryData, null, $totalJokes, $offset);
+            $approvedJokes = [];
+    
+            $searchedJokesCount = count($jokes);
 
-        $jokesnav = $link.' '.$searchedJokesCount.' of '.$msg.' with the word "'.$searchValue.'" found.';
+            foreach ($jokes as $key => $value) {
+                # code...
+                $tempJoke = $value;
+                $tempJokeTempAlbumCover = str_replace("../", '../public/', $tempJoke->albumcover);
+    
+                if (!file_exists($tempJokeTempAlbumCover)) {
+                    # code...
+                    $tempJoke->albumcover = '';
+                }
+                
+                $approvedJokes[] = $tempJoke;
+            }
+    
+            foreach ($categories as $categoryEntity) {
+                if (!empty($categoryId) && $categoryEntity->id == $categoryId) {
+                    $category = $this->categoriesTable->findGeneric('id', $categoryId)[0];
+                    $jokes = $category->getJokes(10,$offset);
+                    $totalJokes = $category->getNumJokes();
+                }
+            }
 
-        return ['template' => 'jokes.html.php', 
-                'title' => 'Music List',
-                'heading' => 'List of Songs',
+            $link = '<a class="navmasterJoke" href="/joke/edit">Add Song</a>';
+    
+            $msg = $totalJokes == 1 ? $totalJokes. ' song' : $totalJokes. ' songs';
+    
+            $jokesnav = $link.' '.$searchedJokesCount.' of '.$msg.' with the word "'.$searchValue.'" found.';
+    
+            return ['template' => 'jokes.html.php', 
+                    'title' => 'Music List',
+                    'heading' => 'List of Songs',
+                    'variables' => [
+                        'totalJokes' => $totalJokes,
+                        'jokes' => $approvedJokes,
+                        'user' => $user,
+                        'categories' => $categories,
+                        'currentPage' => $page,
+                        'categoryId' => $categoryId,
+                        'jokesnav' => $jokesnav,
+                        'songquery' => $searchValue
+                    ]
+                ];
+
+          }elseif ($pageName == 'home') {
+            
+            $title = 'MasteredSite Music Database';
+
+            $allJokes = $this->jokesTable->findAllGeneric('jokedate DESC', 0, 0);
+            $jokes = $this->jokesTable->searchGeneric($searchValueArray, $queryData, null, 0, 0);
+
+            $unapprovedJokes = [];
+            $unapprovedJokesForAdmin = [];
+
+            $allUnapprovedJokes = [];
+            $allUnapprovedJokesForAdmin = [];
+    
+            if (!is_null($user)) {
+                # code...
+                $tempJoke = null;
+                
+                foreach ($allJokes as $key => $value) {
+    
+                    if ($value->authorid == $user->id && !$value->approved) {
+                        $allUnapprovedJokes[] = $value;
+                    }
+    
+                    if ($user->hasPermission(AuthorEntity::APPROVE_JOKE) && !$value->approved) {
+                        unset($allUnapprovedJokes);
+                        $allUnapprovedJokesForAdmin[] = $value;
+                        $allUnapprovedJokes = $allUnapprovedJokesForAdmin;
+                    }
+
+                }
+    
+                foreach ($jokes as $key => $value) {
+                    # code...
+                    $tempJoke = $value;
+                    $tempJokeTempAlbumCover = str_replace("../", '../public/', $tempJoke->albumcover);
+    
+                    if (!file_exists($tempJokeTempAlbumCover)) {
+                        # code...
+                        $tempJoke->albumcover = '';
+                    }
+    
+                    if ($value->authorid == $user->id && !$tempJoke->approved) {
+                        $unapprovedJokes[] = $tempJoke;
+                    }
+    
+                    if ($user->hasPermission(AuthorEntity::APPROVE_JOKE) && !$tempJoke->approved) {
+                        unset($unapprovedJokes);
+                        $unapprovedJokesForAdmin[] = $tempJoke;
+                        $unapprovedJokes = $unapprovedJokesForAdmin;
+                    }
+                }
+            }
+               
+            $heading = 'The Ultimate Music Database';
+    
+            $totalJokes = count($allUnapprovedJokes);
+
+            $searchedJokesCount = count($unapprovedJokes);
+    
+            $link = '<a class="navmasterJoke" href="/joke/edit">Add Song</a>';
+    
+            $msg = $totalJokes == 1 ? $totalJokes. ' song ' : $totalJokes. ' songs';
+    
+            $jokesnav = $link.' Showing '.$searchedJokesCount.' of '.$msg.' pending Approval, with the word "'.$searchValue.'"';
+    
+            return [
+                'template' => 'home.html.php', 
+                'title' => $title, 'heading' => $heading,
                 'variables' => [
-                    'totalJokes' => $totalJokes,
-                    'jokes' => $jokes,
-                    'user' => $user,
+                    'user' => $user ?? null,
+                    'jokes' => $unapprovedJokes,
                     'categories' => $categories,
-                    'currentPage' => $page,
-                    'categoryId' => $categoryId,
                     'jokesnav' => $jokesnav,
                     'songquery' => $searchValue
                 ]
             ];
+          }
     }
 
     public function deleteSubmit() {
@@ -226,16 +387,15 @@ class Joke {
               }
               $heading = 'Editing Song No:'.$joke['id'];
             }
-            
-            $joke['approved'] = 0;
 
-            if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $_POST['approved'] && !is_null($tempJoke)) {
+            if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && !is_null($joke['approved']) && !is_null($tempJoke)) {
                 $joke['jokedate'] = $tempJoke->jokedate;
-                $joke['approved'] = $_POST['approved'];
+                $joke['approved'] = intval($joke['approved']);
                 $joke['datetimeapproved'] = new \DateTime();
                 $joke['approvedby'] = $author->id;
             }else{
                 $joke['jokedate'] = new \DateTime();
+                $joke['approved'] = 0;
             }
             $tempDateTimePublished = $joke['datetimepublished'];
             //$timezone = new \DateTimeZone('CAT');
@@ -329,7 +489,12 @@ class Joke {
                         if(in_array($fileUploadedPathExtension, $allowedImageExtensions)){
 
                             if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 17000000) {
-                                $joke['albumcover'] = str_replace("public/", '', $newFileUploadPath);
+                                $joke['albumcover'] = str_replace("public/", '', $newFileUploadPathUnaproved);
+                                
+                                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $joke['approved']) {
+                                    # code...
+                                    $joke['albumcover'] = str_replace("public/", '', $newFileUploadPath);
+                                }
                                         
                             }else{
                                 $errors[] = "Invalid Image File Size, Expected Max: 16MB";
@@ -342,7 +507,7 @@ class Joke {
                             if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 43000000) {
                                 $joke['song'] = str_replace("public/", '', $newFileUploadPathUnaproved);
 
-                                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $_POST['approved'] && trim(strtolower($fileUploadedPathExtension)) == 'swf') {
+                                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $joke['approved'] && trim(strtolower($fileUploadedPathExtension)) == 'swf') {
                                     # code...
                                     $joke['song'] = str_replace("public/", '', $newFileUploadPath);
                                 }
@@ -361,26 +526,26 @@ class Joke {
                         
                         //A file path needs to be present
                        if (!empty($tmpFileUploadPath)) { 
-                                        //File is uploaded to temp dir
-                                        if($newFolderDirAlreadyExists && $newFolderDirUnapprovedAlreadyExists) {
-                                            //File is uploaded to temp dir
-                                            if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $_POST['approved']) {
-                                                # code...
-                                                if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
-                                                    $errors[] = "Failed To Upload Audio/Image File";
-                                                    $i =+ $fileUploadNamesCount;
-                                                }
-                                            }else{
-                                                if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPathUnaproved)) {
-                                                    $errors[] = "Failed To Upload Audio/Image File";
-                                                    $i =+ $fileUploadNamesCount;
-                                                }
-                                            }
-                                            
-                                        }else{
-                                            $errors[] = "Failed to create Folder for Audio/Image File";
-                                            $i =+ $fileUploadNamesCount;
-                                        }
+                            //File is uploaded to temp dir
+                            if($newFolderDirAlreadyExists && $newFolderDirUnapprovedAlreadyExists) {
+                                //File is uploaded to temp dir
+                                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $joke['approved']) {
+                                    # code...
+                                    if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
+                                        $errors[] = "Failed To Upload Audio/Image File";
+                                        $i =+ $fileUploadNamesCount;
+                                    }
+                                }else{
+                                    if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPathUnaproved)) {
+                                        $errors[] = "Failed To Upload Audio/Image File";
+                                        $i =+ $fileUploadNamesCount;
+                                    }
+                                }
+                                
+                            }else{
+                                $errors[] = "Failed to create Folder for Audio/Image File";
+                                $i =+ $fileUploadNamesCount;
+                            }
                         }
                 }
             }

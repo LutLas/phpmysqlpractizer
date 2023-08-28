@@ -36,22 +36,24 @@
     <?php else: ?>
         </span><label  for="approved">Song Approved: </label><input type="checkbox" name="joke[approved]" id="approved" value="<?= $joke->approved ?? $joke['approved'] ?? '' ?>" /></span>
     <?php endif; ?>
+<?php else: ?>
+    <input type="hidden"  name="joke[approved]" id="approved" value=0 />
 <?php endif; ?>
-                <?php if (!empty($categories)): ?> 
-                    <p>Select Genre</p>
-                    <?php foreach ($categories as $category): ?>
-                        <?php if ($joke && $joke->hasCategory($category->id)): ?>
-                            <input type="checkbox" checked name="category[]" value="<?= $category->id ?>" /> 
-                        <?php else: ?>
-                            <input type="checkbox" name="category[]" value="<?=$category->id?>" /> 
-                        <?php endif; ?>
-                        
-                            <label><?= $category->name ?></label>
-                    <?php endforeach; ?>
+        <?php if (!empty($categories)): ?> 
+            <p>Select Genre</p>
+            <?php foreach ($categories as $category): ?>
+                <?php if ($joke && $joke->hasCategory($category->id)): ?>
+                    <input type="checkbox" checked name="category[]" value="<?= $category->id ?>" /> 
+                <?php else: ?>
+                    <input type="checkbox" name="category[]" value="<?=$category->id?>" /> 
                 <?php endif; ?>
-                <div style="margin-top: 8px;">
-                    <input class="navmaster2" type="submit" name="submit" value="Save">
-                </div>
+                
+                    <label><?= $category->name ?></label>
+            <?php endforeach; ?>
+        <?php endif; ?>
+        <div style="margin-top: 8px;">
+            <input class="navmaster2" type="submit" name="submit" value="Save">
+        </div>
 </form>
 </section>
 <?php else: ?>
