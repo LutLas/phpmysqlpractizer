@@ -88,7 +88,7 @@
 <?php else: ?>
 
     <div class="centermaster">
-    <h3>Hello, There!</h3>
+    <h3 style="margin-top: 8px;">Hello, There!</h3>
     <p>Welcome to the MasteredSite Music Database</p>
     </div>
 

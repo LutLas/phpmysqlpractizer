@@ -15,8 +15,10 @@ class Author {
   public string $name;
   public string $email;
   public string $password;
-  public int $permissions;
-  public bool $verified;
+  public ?int $permissions;
+  public ?bool $verified;
+  public  ?bool $acceptedprivacypolicy;
+  public  ?bool $acceptedeula;
 
   public function __construct(private DatabaseTable $jokesTable) {
 

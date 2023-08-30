@@ -74,11 +74,20 @@ class Author {
           }else{
             unset($author['passwordConfirm']);
           }
+          
+          if (empty($author['acceptedprivacypolicy'])) {
+            $errors[] = 'You Have Not Accepted Our Privacy Policy';
+          }
         
           // If the $errors array is still empty, no fields were blank and the data can be added
           if (empty($errors)) {
             // Hash the password before saving it in the database
             $author['password'] = password_hash($author['password'], PASSWORD_DEFAULT);
+            
+            $author['verified'] = 0;
+            $author['acceptedprivacypolicy'] = 1;
+            $author['acceptedeula'] = 0;
+            $author['permissions'] = 0;
           
             // When submitted, the $author variable now contains a lowercase value for email
             // and a hashed password

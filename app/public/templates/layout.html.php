@@ -10,6 +10,9 @@
 
 <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="/assets/libs/font-awesome-5.14.0/css/all.min.css">
+<!-- sweetalert2 cdn link  -->
+    <link rel="stylesheet" href="/assets/libs/sweetalert2/sweetalert2.min.css">
+    <script src="/assets/js/loading-script.js"></script>
 </head>
 
 <body>
@@ -21,6 +24,8 @@
         <ul class="navmaster">
             <li><a class="customa" href="/">HOME</a></li>
             <li><a class="customa" href="/joke/list">MUSIC LIST</a></li>
+            <li><a class="customa" href="/about/index">ABOUT</a></li>
+            <li><a class="customa" href="/disclaimer/index">DISCLAIMER</a></li>
 
             <?php if ($loggedIn): ?>
             <li><a class="customa" href="/login/logout">LOG OUT</a></li>
@@ -58,11 +63,13 @@
 
 
     <footer>
-        &copy; LUTLAS <?= date('Y') ?>
+        &copy; MasteredSite <?= date('Y') ?>
     </footer>
     <script src="/assets/js/script.js"></script>
     <script src="/assets/libs/ruffle/ruffle.js"></script>
     <script src="/assets/libs/jquery-3.6.0/jquery.slim.min.js"></script>
+    <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/assets/libs/sweetalert2/sweetalert2.all.min.js"></script>
 </body>
 
 </html>

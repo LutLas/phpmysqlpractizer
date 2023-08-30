@@ -3,7 +3,9 @@ namespace Jokessite;
 use Generic\DatabaseTable;
 use Generic\Website;
 use Generic\Authentication;
+use Jokessite\Controllers\Disclaimer;
 use Jokessite\Controllers\Joke;
+use Jokessite\Controllers\About;
 use Jokessite\Controllers\Author;
 use Jokessite\Controllers\Login;
 use Jokessite\Controllers\Category;
@@ -75,7 +77,9 @@ class JokeWebsite implements Website {
             'joke' => new Joke($this->jokesTable, $this->authorsTable, $this->categoriesTable, $this->authentication),
             'author' => new Author($this->authorsTable, $this->authentication),
             'login' => new Login($this->authentication),
-            'category' => new Category($this->categoriesTable)
+            'category' => new Category($this->categoriesTable),
+            'about' => new About($this->authentication),
+            'disclaimer' => new Disclaimer()
         ];
 
         return $controllers[$controllerName] ?? null;
