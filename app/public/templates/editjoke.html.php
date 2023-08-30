@@ -24,14 +24,19 @@
 <label for="joketext">Song Description:</label>
 <textarea style="background-color: #a0be9d;" id="joketext" name="joke[joketext]" rows="3" cols="30" REQUIRED><?= $joke->joketext ?? $joke['joketext'] ?? '' ?></textarea>
 
-<label for="albumcover">Album/Song Image Upload(<small style="color: blue;">Max Size 16MB</small>):</label>
-<input type="file" id="albumcover" name="joke[]" value="<?= $joke->albumcover ?? $joke['albumcover'] ?? '' ?>" accept="image/*" multiple="multiple" REQUIRED>
-
-<label for="song">Audio File Upload(<small style="color: blue;">Max Size 42MB</small>):</label>
-<input type="file" id="song" name="joke[]" value="<?= $joke->song ?? $joke['song'] ?? '' ?>" accept="audio/*" REQUIRED>
-
 <?php if (!empty($user)) :?>
-    <?php if ($user->hasPermission(\Jokessite\Entity\Author::APPROVE_JOKE) && !is_null($joke)): ?> 
+    <label for="albumcover">Album/Song Image Upload(<small style="color: blue;">Max Size 16MB</small>):</label>
+    <input type="file" id="albumcover" name="joke[]" value="<?= $joke->albumcover ?? $joke['albumcover'] ?? '' ?>" accept="image/*" multiple="multiple" REQUIRED>
+
+    <?php if ($user->hasPermission(\Jokessite\Entity\Author::APPROVE_JOKE)): ?> 
+        <label for="song">Admin Audio Upload (<small style="color: blue;">Max Size 42MB</small>):</label>
+        <input type="file" id="song" name="joke[]" value="<?= $joke->song ?? $joke['song'] ?? '' ?>" REQUIRED>
+    <?php else: ?>
+        <label for="song">Audio File Upload(<small style="color: blue;">Max Size 42MB</small>):</label>
+        <input type="file" id="song" name="joke[]" value="<?= $joke->song ?? $joke['song'] ?? '' ?>" accept="audio/*" REQUIRED>
+    <?php endif; ?>
+
+    <?php if ($user->hasPermission(\Jokessite\Entity\Author::APPROVE_JOKE) && !empty($joke)): ?> 
         <?php if ($joke->approved): ?>
             <span><label  for="approved">Song Approved: </label><input type="checkbox" checked name="joke[approved]" id="approved" value="<?= $joke->approved ?? $joke['approved'] ?? '' ?>" /></span>
         <?php else: ?>

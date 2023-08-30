@@ -471,7 +471,7 @@ class Joke {
                         $fileUploadedPathExtension = end($fileUploadedPathExtensionExtract);
                                     
                         //Setup our new file path
-                        $uploadsDir = "../public/assets/music/uploads/";
+                        $uploadsDir = "../public/assets/music/uploads/Approved/";
                         $uploadsDirUnapproved = "../public/assets/music/uploads/Unapproved/";
                         $newFolderDir = $uploadsDir. $joke['artistname'] ."/". $joke['albumname'] ."/";
                         $newFolderDirUnapproved = $uploadsDirUnapproved. $joke['artistname'] ."/". $joke['albumname'] ."/";
