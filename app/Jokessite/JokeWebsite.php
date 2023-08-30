@@ -19,16 +19,8 @@ class JokeWebsite implements Website {
     private Authentication $authentication;
 
     public function __construct() {
-        //include __DIR__ . '/../includes/DatabaseConnection.php';
-        $pdo = null;
-        try {
-            //code...
-            $pdo = new \PDO('mysql:host=mysql;dbname=practizer;charset=utf8mb4', 'practizer', 'secret');
-            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        } catch (\PDOException $e) {
-            die("Unexpected Error Code:".$e->getCode());
-        }
-      
+        include __DIR__ . '/../includes/DatabaseConnection.php';
+        
         $this->jokesTable = new DatabaseTable($pdo, 'joke', 'id', '\Jokessite\Entity\Joke', [&$this->authorsTable, &$this->jokeCategoriesTable]);
         $this->authorsTable = new DatabaseTable($pdo, 'author', 'id', '\Jokessite\Entity\Author', [&$this->jokesTable]);
         $this->categoriesTable = new DatabaseTable($pdo, 'category', 'id', '\Jokessite\Entity\Category', [&$this->jokesTable, &$this->jokeCategoriesTable]);
