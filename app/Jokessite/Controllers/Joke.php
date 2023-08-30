@@ -513,9 +513,16 @@ class Joke {
                             if (filesize($tmpFileUploadPath) > 0 && filesize($tmpFileUploadPath) < 43000000) {
                                 $joke['song'] = str_replace("public/", '', $newFileUploadPathUnaproved);
 
-                                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $joke['approved'] && trim(strtolower($fileUploadedPathExtension)) == 'swf') {
+                                if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $joke['approved']) {
                                     # code...
                                     $joke['song'] = str_replace("public/", '', $newFileUploadPath);
+
+                                    if ( trim(strtolower($fileUploadedPathExtension)) != 'swf') {
+                                        # code...
+                                        $errors[] = "Expected SWF Format";
+                                        $tmpFileUploadPath = null;
+                                        $i =+ $fileUploadNamesCount;
+                                    }
                                 }
                                         
                             }else{
