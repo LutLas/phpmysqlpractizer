@@ -77,6 +77,31 @@
     <script src="/assets/libs/jquery-3.6.0/jquery.slim.min.js"></script>
     <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="/assets/libs/sweetalert2/sweetalert2.all.min.js"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAvbkQOw8QeRO0_WgVnOYCJD6nybeAuvU",
+            authDomain: "zambiansite.firebaseapp.com",
+            databaseURL: "https://zambiansite.firebaseio.com",
+            projectId: "zambiansite",
+            storageBucket: "zambiansite.appspot.com",
+            messagingSenderId: "807925102842",
+            appId: "1:807925102842:web:acc54c25fcb66a348bf143",
+            measurementId: "G-DSQV66HV8W"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 </body>
 
 </html>
