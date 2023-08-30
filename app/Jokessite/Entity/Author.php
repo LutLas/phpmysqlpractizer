@@ -30,7 +30,11 @@ class Author {
 
   public function addJoke(array $joke) {
     // set the `authorId` in the new joke to the id stored in this instance
-    $joke['authorid'] = $this->id;
+    if (empty($joke['approved']) && empty($joke['authorid'])) {
+      # code...
+      $joke['authorid'] = $this->id;
+    }
+    
   
     return $this->jokesTable->saveGeneric($joke);
   }

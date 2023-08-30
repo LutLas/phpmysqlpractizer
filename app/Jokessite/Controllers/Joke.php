@@ -382,21 +382,27 @@ class Joke {
             if (!empty($joke['id'])) {
               $tempJoke = $this->jokesTable->findGeneric('id', $joke['id'])[0];
         
-              if ($tempJoke->authorid != $author->id && $author->permissions < AuthorEntity::APPROVE_JOKE) {
+              if ($tempJoke->authorid != $author->id && !$author->hasPermission(AuthorEntity::APPROVE_JOKE)) {
                 return header('location: /joke/list');  
               }
               $heading = 'Editing Song No:'.$joke['id'];
             }
 
-            if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && !is_null($joke['approved']) && !is_null($tempJoke)) {
-                $joke['jokedate'] = $tempJoke->jokedate;
-                $joke['approved'] = intval($joke['approved']);
+            if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && !empty($joke['approved'])) {
+                $joke['approved'] = 1;
                 $joke['datetimeapproved'] = new \DateTime();
                 $joke['approvedby'] = $author->id;
             }else{
                 $joke['jokedate'] = new \DateTime();
                 $joke['approved'] = 0;
             }
+
+            if (!is_null($tempJoke)) {
+                # code...
+                $joke['authorid'] = $tempJoke->authorid;
+                $joke['jokedate'] = $tempJoke->jokedate;
+            }
+
             $tempDateTimePublished = $joke['datetimepublished'];
             //$timezone = new \DateTimeZone('CAT');
             //$joke['jokedate']->setTimezone($timezone);

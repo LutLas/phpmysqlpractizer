@@ -37,13 +37,9 @@
     <?php endif; ?>
 
     <?php if ($user->hasPermission(\Jokessite\Entity\Author::APPROVE_JOKE) && !empty($joke)): ?> 
-        <?php if ($joke->approved): ?>
-            <span><label  for="approved">Song Approved: </label><input type="checkbox" checked name="joke[approved]" id="approved" value="<?= $joke->approved ?? $joke['approved'] ?? '' ?>" /></span>
-        <?php else: ?>
-            </span><label  for="approved">Song Approved: </label><input type="checkbox" name="joke[approved]" id="approved" value="<?= $joke->approved ?? $joke['approved'] ?? '' ?>" /></span>
-        <?php endif; ?>
+        <span><label  for="approved">Song Approved: </label><input type="checkbox" name="joke[approved]" id="approved"  <?= $joke->approved ? 'checked' : '' ?> /></span>
     <?php else: ?>
-        <input type="hidden"  name="joke[approved]" id="approved" value=0 />
+        <input type="hidden"  name="joke[approved]" id="approved" value="" />
     <?php endif; ?>
 <?php endif;?>
         <?php if (!empty($categories)): ?> 
