@@ -1,5 +1,5 @@
 
-<form class="centermaster" style="margin-top: 8px;" action="" method="post">
+<form class="centermaster larger" style="margin-top: 8px;" action="" method="post">
 
                         <label for="email">Email Address</label>
 

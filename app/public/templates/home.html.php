@@ -17,7 +17,7 @@
     <?php endforeach; ?>
 <div>
 
-<div class="centermaster">
+<div class="centermaster larger">
 <h3>Hello, <?=$user->name?></h3>
 <p>You have access to the MasteredSite Music Database</p>
 </div>
@@ -87,7 +87,7 @@
 
 <?php else: ?>
 
-    <div class="centermaster">
+    <div class="centermaster large">
     <h3 style="margin-top: 8px;">Hello, There!</h3>
     <p>Welcome to the MasteredSite Music Database</p>
     </div>

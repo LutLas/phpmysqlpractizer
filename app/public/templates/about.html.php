@@ -1,4 +1,4 @@
-<div class="centermaster">
+<div class="centermaster larger">
     <h3 style="padding: 8px;"><?= $miniheading ?? '' ?></h3>
 
     <?php foreach ($aboutTexts as $key => $value):?> 
@@ -6,7 +6,7 @@
     <?php endforeach; ?>
 </div>
 
-<div class="centermaster" style="padding: 8px;">
+<div class="centermaster larger" style="padding: 8px;">
 <h3><strong>PRIVACY POLICY</strong></h3>
 	    <strong>Last updated August 30th, 2023</strong>
 	  

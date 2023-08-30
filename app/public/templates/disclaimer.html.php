@@ -1,4 +1,4 @@
-<div class="centermaster">
+<div class="centermaster larger">
     <p>---</p>
     <h3><?= $miniheading ?? '' ?></h3>
 

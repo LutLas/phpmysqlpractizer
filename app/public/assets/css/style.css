@@ -45,6 +45,14 @@ html{
    overflow-x: hidden;
 }
 
+.larger{
+   font-size: 14px;
+}
+
+.large{
+   font-size: 16px;
+}
+
 body{
    background-color: var(--light-bg);
 }

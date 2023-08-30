@@ -1,6 +1,6 @@
 <?php if (empty($joke->id) || $user->id == $joke->authorid || $user->hasPermission(\Jokessite\Entity\Author::EDIT_JOKE)): ?>
 <section class="form-container">
-<form class="centermaster" action="" method="post" enctype="multipart/form-data">
+<form class="centermaster larger" action="" method="post" enctype="multipart/form-data">
   <input type="hidden" name="joke[id]" value="<?= $joke->id ?? $joke['id'] ?? '' ?>">
 
 <label for="joketitle">Song Title:</label>
