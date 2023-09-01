@@ -1,3 +1,4 @@
 # ignore all files in the following directory
-app/public/assets/music/uploads/
+app/public/assets/music/uploads/Approved/
+app/public/assets/music/uploads/Unapproved/
 app/includes/DatabaseConnection.php
