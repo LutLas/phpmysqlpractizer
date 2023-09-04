@@ -63,8 +63,8 @@ class Author {
       
         if (empty($author['password'])) {
             $errors[] = 'Password is Required';
-          }elseif (strlen($author['password']) < 8 || strlen($author['password']) > 16 ) {
-            $errors[] = 'Password Must Be 8-16 Characters';
+          }elseif (strlen($author['password']) < 8 || strlen($author['password']) > 25 ) {
+            $errors[] = 'Password Must Be 8-25 Characters';
           }elseif (ctype_alnum($author['password'])) {
             $errors[] = 'Password Must Contain One Non-Alphanumeric Character';
           }
