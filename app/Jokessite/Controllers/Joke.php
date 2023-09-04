@@ -226,7 +226,7 @@ class Joke {
     
             $msg = $totalJokes == 1 ? $totalJokes. ' song' : $totalJokes. ' songs';
     
-            $jokesnav = $link.' '.$searchedJokesCount.' of '.$msg.' with the word "'.$searchValue.'" found.';
+            $jokesnav = $link.' '.$searchedJokesCount.' of '.$msg.' with the word "'.htmlspecialchars($searchValue, ENT_QUOTES,'UTF-8').'" found.';
     
             return ['template' => 'jokes.html.php', 
                     'title' => 'Music List',
@@ -248,7 +248,7 @@ class Joke {
             $title = 'MasteredSite Music Database';
 
             $allJokes = $this->jokesTable->findAllGeneric('jokedate DESC', 0, 0);
-            
+
             $jokes = $this->jokesTable->searchGeneric($searchValueArray, $queryData, null, 0, 0);
             
             if(trim($searchValue) == ""){
@@ -311,7 +311,7 @@ class Joke {
     
             $msg = $totalJokes == 1 ? $totalJokes. ' song ' : $totalJokes. ' songs';
     
-            $jokesnav = $link.' Showing '.$searchedJokesCount.' of '.$msg.' pending Approval, with the word "'.$searchValue.'"';
+            $jokesnav = $link.' Showing '.$searchedJokesCount.' of '.$msg.' pending Approval, with the word "'.htmlspecialchars($searchValue, ENT_QUOTES,'UTF-8').'"';
     
             return [
                 'template' => 'home.html.php', 

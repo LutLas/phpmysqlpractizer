@@ -39,9 +39,9 @@
 
           <?= (new \Generic\Markdown($joke->joketext))->toHtml();?>
 
-          (by <a href="mailto:<?php
-            echo htmlspecialchars($joke->getAuthor()->email, ENT_QUOTES,
-              'UTF-8'); ?>"><?php
+          (by <a href="mailto:<?php if (!empty($user) && !empty($user->verified)): ?><?php echo htmlspecialchars($joke->getAuthor()->email, ENT_QUOTES,
+              'UTF-8'); ?>
+              <?php endif; ?>"><?php
             echo htmlspecialchars($joke->getAuthor()->name, ENT_QUOTES,
               'UTF-8'); ?></a> on <?php
               $date = new DateTime($joke->jokedate);

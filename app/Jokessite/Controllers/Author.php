@@ -60,6 +60,14 @@ class Author {
         if (empty($author['name'])) {
           $errors[] = 'User Name is Required';
         }
+
+        if (count($this->authorsTable->findGeneric('name', $author['name'])) > 0) {
+          $errors[] = '"'.htmlspecialchars($author['name'], ENT_QUOTES, 'UTF-8').'" is Already Taken';
+        }
+
+        if (!ctype_alnum($author['name'])) {
+          $errors[] = 'User Name Must Be Alphanumeric Only';
+        }
       
         if (empty($author['password'])) {
             $errors[] = 'Password is Required';

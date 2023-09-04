@@ -18,7 +18,7 @@
 <div>
 
 <div class="centermaster larger">
-<h3>Hello, <?=$user->name?></h3>
+<h3>Hello, <?= htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8'); ?></h3>
 <p>You have access to the MasteredSite Music Database</p>
 </div>
 
@@ -29,9 +29,7 @@
     <?php if (!$joke->approved && !$joke->archived): ?>
       <div class="box">
         
-        <div class="title"><?= htmlspecialchars($joke->joketitle, ENT_QUOTES,
-              'UTF-8'); ?>(prod.<?= htmlspecialchars($joke->producername, ENT_QUOTES,
-              'UTF-8'); ?>)</div>
+        <div class="title"><?= htmlspecialchars($joke->joketitle, ENT_QUOTES,'UTF-8'); ?>(prod.<?= htmlspecialchars($joke->producername, ENT_QUOTES,'UTF-8'); ?>)</div>
 
           <?php if (!empty($joke->albumcover)): ?>
           <img src="<?= $joke->albumcover; ?>" alt="" class="album">
@@ -39,18 +37,14 @@
           <img src="../assets/images/disc.png" alt="" class="album">
           <?php endif; ?>
         
-          <div class="name"><?= htmlspecialchars($joke->artistname, ENT_QUOTES,
-              'UTF-8');?></div>
-          <div class="artist"><?= htmlspecialchars($joke->albumname, ENT_QUOTES,
-              'UTF-8'); ?></div>
+          <div class="name"><?= htmlspecialchars($joke->artistname, ENT_QUOTES, 'UTF-8');?></div>
+          <div class="artist"><?= htmlspecialchars($joke->albumname, ENT_QUOTES, 'UTF-8'); ?></div>
 
           <?= (new \Generic\Markdown($joke->joketext))->toHtml();?>
 
           (by <a href="mailto:<?php
-            echo htmlspecialchars($joke->getAuthor()->email, ENT_QUOTES,
-              'UTF-8'); ?>"><?php
-            echo htmlspecialchars($joke->getAuthor()->name, ENT_QUOTES,
-              'UTF-8'); ?></a> on <?php
+            echo htmlspecialchars($joke->getAuthor()->email, ENT_QUOTES, 'UTF-8'); ?>"><?php
+            echo htmlspecialchars($joke->getAuthor()->name, ENT_QUOTES, 'UTF-8'); ?></a> on <?php
               $date = new DateTime($joke->jokedate);
               
               echo $date->format('jS F Y H:i:s');
