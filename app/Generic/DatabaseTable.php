@@ -19,7 +19,7 @@ class DatabaseTable {
 
       $row = $stmt->fetch();
 
-      return $row[0];
+      return $row['COUNT(*)'];
     }
 
     public function findGeneric(string $field, string $value, string $orderBy = null, int $limit = 0) {

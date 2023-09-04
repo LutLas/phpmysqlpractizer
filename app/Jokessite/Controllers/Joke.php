@@ -22,12 +22,7 @@ class Joke {
             'archived' => 0
         ];
 
-        $totalJokes = 0;
-
-        if (!empty($user)) {
-            # code...
-            $totalJokes = $this->jokesTable->totalGeneric($queryData);
-        }
+        $totalJokes = $this->jokesTable->totalGeneric($queryData);
 
         foreach ($jokes as $key => $value) {
             # code...
@@ -153,7 +148,7 @@ class Joke {
         $searchValue = $_POST['songquery'];
         $pageName = $_POST['pagequery'];
 
-        if (trim(empty($searchValue))||trim(empty($pageName))) {
+        if (trim(empty($pageName))) {
             return;
         }
 
@@ -193,16 +188,15 @@ class Joke {
 
           if ($pageName == 'musiclist') {
 
-            $totalJokes = 0;
-    
-            if (!empty($user)) {
-                # code...
-                $totalJokes = $this->jokesTable->totalGeneric($queryData);
-            }
+            $totalJokes = $this->jokesTable->totalGeneric($queryData);
     
             $offset = ($page-1) * $totalJokes;
-
             $jokes = $this->jokesTable->searchGeneric($searchValueArray, $queryData, null, $totalJokes, $offset);
+            
+            if(trim($searchValue) == ""){
+                $jokes = [];
+            }
+
             $approvedJokes = [];
     
             $searchedJokesCount = count($jokes);
@@ -254,7 +248,12 @@ class Joke {
             $title = 'MasteredSite Music Database';
 
             $allJokes = $this->jokesTable->findAllGeneric('jokedate DESC', 0, 0);
+            
             $jokes = $this->jokesTable->searchGeneric($searchValueArray, $queryData, null, 0, 0);
+            
+            if(trim($searchValue) == ""){
+                $jokes = [];
+            }
 
             $unapprovedJokes = [];
             $unapprovedJokesForAdmin = [];
