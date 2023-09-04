@@ -22,7 +22,12 @@ class Joke {
             'archived' => 0
         ];
 
-        $totalJokes = $this->jokesTable->totalGeneric($queryData);
+        $totalJokes = 0;
+
+        if (!empty($user)) {
+            # code...
+            $totalJokes = $this->jokesTable->totalGeneric($queryData);
+        }
 
         foreach ($jokes as $key => $value) {
             # code...
@@ -188,7 +193,12 @@ class Joke {
 
           if ($pageName == 'musiclist') {
 
-            $totalJokes = $this->jokesTable->totalGeneric($queryData);
+            $totalJokes = 0;
+    
+            if (!empty($user)) {
+                # code...
+                $totalJokes = $this->jokesTable->totalGeneric($queryData);
+            }
     
             $offset = ($page-1) * $totalJokes;
 
