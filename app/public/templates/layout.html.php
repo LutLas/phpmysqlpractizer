@@ -12,6 +12,9 @@
     <!-- Logo -->
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7102371719293996"
+     crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="/assets/css/style.css">
     <title><?= $title ?></title>
 
@@ -102,8 +105,6 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
     </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7102371719293996"
-     crossorigin="anonymous"></script>
 </body>
 
 </html>
