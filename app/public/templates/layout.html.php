@@ -12,6 +12,7 @@
     <!-- Logo -->
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
 
+    <!--  remember to uncomment this after testing -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7102371719293996"
      crossorigin="anonymous"></script>
 
@@ -98,20 +99,12 @@ window.__h82AlnkH6D91__("WyJwdWItNzEwMjM3MTcxOTI5Mzk5NiIsW251bGwsbnVsbCxudWxsLCJ
         <?php endif; ?>
         <?= $output ?>
     </main>
-    <div class="music-player">
-
-        <i class="fas fa-times" id="close"></i>
-        <embed controls class="music"></embed>
-
-    </div>
-    
 
 
     <footer>
         &copy; MasteredSite <?= date('Y') ?>
     </footer>
-    <script src="/assets/js/script.js"></script>
-    <script src="/assets/libs/ruffle/ruffle.js"></script>
+    <script src="/assets/js/ruffle-script.js"></script>
     <script src="/assets/libs/jquery-3.6.0/jquery.slim.min.js"></script>
     <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="/assets/libs/sweetalert2/sweetalert2.all.min.js"></script>

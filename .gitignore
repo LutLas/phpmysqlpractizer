@@ -1,4 +1,6 @@
 # ignore all files in the following directory
 app/public/assets/music/uploads/Approved/
-app/public/assets/music/uploads/Unapproved/
+app/public/assets/music/uploads/Kulibiletu/
+app/public/assets/music/
+app/public/assets/images/uploads/
 app/includes/DatabaseConnection.php

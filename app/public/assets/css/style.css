@@ -26,7 +26,8 @@
    --blueish:#301fce;
    --blueblackish:#080034;
    --purpleish:#532f76;
-   --box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
+   --box-shadow:0 .5rem 1rem rgba(0, 0, 0, 0.409);
+   --ruffle-box-shadow:0 .3em 1rem var(--purpleish);
    --border:.2rem solid var(--black);
    --border2:.1rem solid var(--black);
    --border3:.2rem solid var(--purpleish);
@@ -312,18 +313,35 @@ section{
    border-radius: 0;
 }
 
-.music-player #close{
-   position: absolute;
-   top:2rem; right: 2.5rem;
-   cursor: pointer;
-   color:var(--white);
-   font-size: 5rem;
-   transition: .2s linear;
+.ruffle-player-box{
+   top:10rem;
+   padding: 2px;
+   position:sticky; 
+   border: var(--border3);
+   border-radius: 2rem;
+   background-color: var(--white);
+   box-shadow: var(--ruffle-box-shadow);
+   text-align: center;
 }
 
-.music-player #close:hover{
-   transform: rotate(90deg);
-}
+.ruffle-player-box-title{
+   font-family: "novasquare";
+   font-size: 1.3rem;
+   color:var(--black);
+   font-weight: bold;
+ }
+
+ .ruffle-player-box-name{
+    font-size: 1.3rem;
+    color:var(--black);
+    font-weight: bold;
+ }
+ 
+ .ruffle-player-box-artist{
+    font-size: 1.1rem;
+    color:var(--main-color);
+    font-weight: bold;
+ }
 
 .customa {
   background: transparent;

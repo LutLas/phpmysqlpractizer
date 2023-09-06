@@ -8,6 +8,18 @@
     </form>
   </div>
         <?=$jokesnav?>
+
+</div>
+
+
+        
+<div id="ruffle-player-container" class="centermaster ruffle-player-box">
+      <div class="ruffle-player-box-close" id="close"></div>
+      <div class="ruffle-player-box-title" id="ruffle-player-title"></div>
+      <div class="ruffle-player-box-artist" id="ruffle-player-album"></div>
+      <div class="ruffle-player-box-name" id="ruffle-player-artist"></div>
+      <img id="ruffle-player-cover" style="height: 90px; width:90px;" src="/../assets/images/favicon.png" alt="song's album art cover">
+      <audio controls controlsList="noplaybackrate nodownload" id="ruffle-player-embed" class="ruffle-player"></audio>
 </div>
 
 <div style="margin-top: 10px;">
@@ -65,23 +77,9 @@
           <?php endif; ?>
           <div class="flex">
           <div class="play" data-src="<?= $joke->song; ?>"><i class="fas fa-play"></i><span>play</span></div>
-          <!-- <a href="<?= $joke->song; ?>" download><i class="fas fa-download"></i><span>download</span></a> -->
         </div>
       </div>
     <?php endif; ?>
   <?php endforeach; ?>
 
 </div>
-
-Select Page:
-<?php
-// Calculate the number of pages
-$numPages = ceil($totalJokes/10);
-
-for ($i = 1; $i <= $numPages; $i++):
-  if ($i == $currentPage):?>
-    <a class="navmaster2" href="/joke/list?page=<?=$i?>"><?=$i?></a>
-  <?php else: ?>
-    <a class="navmasterBlue" href="/joke/list/<?=$categoryId?>/<?=$i?>"><?=$i?></a>
-  <?php endif; ?>
-<?php endfor; ?>

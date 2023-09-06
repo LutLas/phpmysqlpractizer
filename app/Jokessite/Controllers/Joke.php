@@ -25,9 +25,11 @@ class Joke {
         $totalJokes = $this->jokesTable->totalGeneric($queryData);
 
         foreach ($jokes as $key => $value) {
-            # code...
+            # code...  
             $tempJoke = $value;
             $tempJokeTempAlbumCover = str_replace("../", '../public/', $tempJoke->albumcover);
+            $tempJokeSongUrl = base64_encode($tempJoke->song);
+            $tempJoke->song = $tempJokeSongUrl;
 
             if (!file_exists($tempJokeTempAlbumCover)) {
                 # code...
@@ -205,6 +207,8 @@ class Joke {
                 # code...
                 $tempJoke = $value;
                 $tempJokeTempAlbumCover = str_replace("../", '../public/', $tempJoke->albumcover);
+                $tempJokeSongUrl = base64_encode($tempJoke->song);
+                $tempJoke->song = $tempJokeSongUrl;
     
                 if (!file_exists($tempJokeTempAlbumCover)) {
                     # code...
@@ -484,20 +488,27 @@ class Joke {
                         $fileUploadedPathExtensionExtract = explode(".", $fileUploadedPath);
                         
                         $fileUploadedPathExtension = end($fileUploadedPathExtensionExtract);
-                                    
-                        //Setup our new file path
+                        
+                        //Setup our new fileImage path
+                        $uploadsDirImage = "../public/assets/images/Uploads/";
                         $uploadsDir = "../public/assets/music/uploads/Approved/";
-                        $uploadsDirUnapproved = "../public/assets/music/uploads/Unapproved/";
+                        $uploadsDirUnapproved = "../public/assets/music/uploads/Kulibiletu/";
+
+                        $newFolderDirImage = $uploadsDirImage. $joke['artistname'] ."/". $joke['albumname'] ."/";
                         $newFolderDir = $uploadsDir. $joke['artistname'] ."/". $joke['albumname'] ."/";
                         $newFolderDirUnapproved = $uploadsDirUnapproved. $joke['artistname'] ."/". $joke['albumname'] ."/";
+
+                        $newFolderDirImageAlreadyExists = true;
                         $newFolderDirAlreadyExists = true;
                         $newFolderDirUnapprovedAlreadyExists = true;
 
-                        if (!file_exists($newFolderDir) || !file_exists($newFolderDirUnapproved)){
+                        if (!file_exists($newFolderDirImage) || !file_exists($newFolderDir) || !file_exists($newFolderDirUnapproved )){
+                            $newFolderDirImageAlreadyExists = mkdir($newFolderDirImage, 0777, true);
                             $newFolderDirAlreadyExists = mkdir($newFolderDir, 0777, true);
                             $newFolderDirUnapprovedAlreadyExists = mkdir($newFolderDirUnapproved, 0777, true);
                         }
 
+                        $newFileUploadPathImage = $newFolderDirImage . $fileUploadedPath;
                         $newFileUploadPath = $newFolderDir . $fileUploadedPath;
                         $newFileUploadPathUnaproved = $newFolderDirUnapproved . $fileUploadedPath;
 
@@ -508,7 +519,7 @@ class Joke {
                                 
                                 if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $joke['approved']) {
                                     # code...
-                                    $joke['albumcover'] = str_replace("public/", '', $newFileUploadPath);
+                                    $joke['albumcover'] = str_replace("public/", '', $newFileUploadPathImage);
                                 }
                                         
                             }else{
@@ -526,9 +537,9 @@ class Joke {
                                     # code...
                                     $joke['song'] = str_replace("public/", '', $newFileUploadPath);
 
-                                    if ( trim(strtolower($fileUploadedPathExtension)) != 'swf') {
+                                    if ( trim(strtolower($fileUploadedPathExtension)) != 'mp3') {
                                         # code...
-                                        $errors[] = "Expected SWF Format";
+                                        $errors[] = "Expected MP3 Format";
                                         $tmpFileUploadPath = null;
                                         $i =+ $fileUploadNamesCount;
                                     }
@@ -549,15 +560,32 @@ class Joke {
                         //A file path needs to be present
                        if (!empty($tmpFileUploadPath)) { 
                             //File is uploaded to temp dir
-                            if($newFolderDirAlreadyExists && $newFolderDirUnapprovedAlreadyExists) {
+                            if($newFolderDirAlreadyExists && $newFolderDirUnapprovedAlreadyExists && $newFolderDirImageAlreadyExists) {
                                 //File is uploaded to temp dir
                                 if ($author->hasPermission(AuthorEntity::APPROVE_JOKE) && $joke['approved']) {
                                     # code...
-                                    if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
-                                        $errors[] = "Failed To Upload Audio/Image File";
+                                    
+                                    if(in_array($fileUploadedPathExtension, $allowedImageExtensions)){
+                                    
+                                        if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPathImage)) {
+                                            $errors[] = "Failed To Upload Image File";
+                                            $i =+ $fileUploadNamesCount;
+                                        }
+
+                                    }elseif(in_array($fileUploadedPathExtension, $allowedAudioExtensions)){
+
+                                        if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPath)) {
+                                            $errors[] = "Failed To Upload Audio File";
+                                            $i =+ $fileUploadNamesCount;
+                                        }
+
+                                    }else{
+                                        $errors[] = "Music/Image File Extension Not Supported, Expected Type: 'png', 'jpg', 'jpeg','mp3', 'wav', 'm4a','3gp','webm','ogg','oga','mogg'";
                                         $i =+ $fileUploadNamesCount;
                                     }
+
                                 }else{
+
                                     if(!move_uploaded_file($tmpFileUploadPath, $newFileUploadPathUnaproved)) {
                                         $errors[] = "Failed To Upload Audio/Image File";
                                         $i =+ $fileUploadNamesCount;
